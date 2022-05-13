@@ -4,6 +4,7 @@ import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class UserCRUDMemory implements UserCRUD<User, Integer> {
     private HashMap<Integer, User> db;
@@ -23,12 +24,17 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void update(Integer id, User updatedObject) {
+    public void update(User updatedObject) {
 
     }
 
     @Override
     public void delete(Integer id) {
 
+    }
+
+    @Override
+    public List<User> readAll() {
+        return null;
     }
 }

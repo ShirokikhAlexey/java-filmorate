@@ -4,6 +4,7 @@ import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     private HashMap<Integer, Film> db;
@@ -23,12 +24,17 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
-    public void update(Integer id, Film updatedObject) {
+    public void update(Film updatedObject) {
 
     }
 
     @Override
     public void delete(Integer id) {
 
+    }
+
+    @Override
+    public List<Film> readAll() {
+        return null;
     }
 }
