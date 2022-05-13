@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
 import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.error.NotFoundError;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -35,6 +33,11 @@ public class UserController {
     @GetMapping(value = "/users")
     public List<User> findAll(){
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        return connection.readAll();
+        try{
+            return connection.readAll();
+        } catch (NotFoundError e){
+            return null;
+        }
+
     }
 }

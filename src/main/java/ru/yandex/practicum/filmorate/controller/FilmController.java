@@ -33,6 +33,11 @@ public class FilmController {
     @GetMapping(value = "/films")
     public List<Film> findAll(){
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
-        return connection.readAll();
+        try{
+            return connection.readAll();
+        } catch (NotFoundError e) {
+            return null;
+        }
+
     }
 }
