@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
 import ru.yandex.practicum.filmorate.error.NotFoundError;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
+@Slf4j
 @RestController
 @RequestMapping("/film")
 public class FilmController {
@@ -21,6 +23,7 @@ public class FilmController {
         } catch (ValidationException e){
             return null;
         }
+        log.info("Добавлен фильм {}", film.toString());
         return film;
     }
 
@@ -35,9 +38,12 @@ public class FilmController {
             } catch (ValidationException exception){
                 return null;
             }
+            log.info("Добавлен фильм {}", film.toString());
+            return film;
         } catch (ValidationException e){
             return null;
         }
+        log.info("Изменен фильм {}", film.toString());
         return film;
     }
 

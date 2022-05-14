@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.error.NotFoundError;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,7 +23,7 @@ public class UserController {
         } catch (ValidationException e){
             return null;
         }
-
+        log.info("Добавлен пользователь {}", user.toString());
         return user;
     }
 
@@ -36,9 +38,12 @@ public class UserController {
             } catch (ValidationException exception) {
                 return null;
             }
+            log.info("Добавлен пользователь {}", user.toString());
+            return user;
         } catch (ValidationException exception){
             return null;
         }
+        log.info("Изменен пользователь {}", user.toString());
         return user;
     }
 
