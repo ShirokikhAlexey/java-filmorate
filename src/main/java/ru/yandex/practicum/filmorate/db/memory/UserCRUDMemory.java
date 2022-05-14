@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.db.memory;
 
 import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.error.NotFoundError;
+import ru.yandex.practicum.filmorate.error.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -24,12 +25,14 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void create(User object) {
+    public void create(User object) throws ValidationException {
+        this.validate(object);
         db.put(object.getId(), object);
     }
 
     @Override
-    public void update(User updatedObject) throws NotFoundError{
+    public void update(User updatedObject) throws NotFoundError, ValidationException{
+        this.validate(updatedObject);
         if (db.containsKey(updatedObject.getId())){
             db.put(updatedObject.getId(), updatedObject);
         } else {

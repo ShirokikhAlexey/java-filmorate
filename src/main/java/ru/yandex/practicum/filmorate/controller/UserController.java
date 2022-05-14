@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.error.NotFoundError;
+import ru.yandex.practicum.filmorate.error.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -15,7 +16,12 @@ public class UserController {
     @PostMapping
     public User create(@RequestBody User user){
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        connection.create(user);
+        try{
+            connection.create(user);
+        } catch (ValidationException e){
+            return null;
+        }
+
         return user;
     }
 
@@ -25,7 +31,13 @@ public class UserController {
         try{
             connection.update(user);
         } catch (NotFoundError e){
-            connection.create(user);
+            try{
+                connection.create(user);
+            } catch (ValidationException exception) {
+                return null;
+            }
+        } catch (ValidationException exception){
+            return null;
         }
         return user;
     }
