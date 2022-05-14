@@ -13,41 +13,32 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
 @Slf4j
 @RestController
-@RequestMapping("/film")
+@RequestMapping("/films")
 public class FilmController {
     @PostMapping
-    public Film create(@RequestBody Film film) {
+    public Film create(@RequestBody Film film) throws ValidationException {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
-        try {
-            connection.create(film);
-        } catch (ValidationException e) {
-            return null;
-        }
+        connection.create(film);
+
         log.info("Добавлен фильм {}", film.toString());
         return film;
     }
 
     @PutMapping
-    public Film update(@RequestBody Film film) {
+    public Film update(@RequestBody Film film) throws ValidationException {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {
             connection.update(film);
         } catch (NotFoundError e) {
-            try {
-                connection.create(film);
-            } catch (ValidationException exception) {
-                return null;
-            }
+            connection.create(film);
             log.info("Добавлен фильм {}", film.toString());
             return film;
-        } catch (ValidationException e) {
-            return null;
         }
         log.info("Изменен фильм {}", film.toString());
         return film;
     }
 
-    @GetMapping(value = "/films")
+    @GetMapping
     public List<Film> findAll() {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {

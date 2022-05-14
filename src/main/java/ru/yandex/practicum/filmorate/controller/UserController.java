@@ -13,41 +13,32 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User create(@RequestBody User user) throws ValidationException {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        try {
-            connection.create(user);
-        } catch (ValidationException e) {
-            return null;
-        }
+
+        connection.create(user);
         log.info("Добавлен пользователь {}", user.toString());
         return user;
     }
 
     @PutMapping
-    public User update(@RequestBody User user) {
+    public User update(@RequestBody User user) throws ValidationException {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
         try {
             connection.update(user);
         } catch (NotFoundError e) {
-            try {
-                connection.create(user);
-            } catch (ValidationException exception) {
-                return null;
-            }
+            connection.create(user);
             log.info("Добавлен пользователь {}", user.toString());
             return user;
-        } catch (ValidationException exception) {
-            return null;
         }
         log.info("Изменен пользователь {}", user.toString());
         return user;
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public List<User> findAll() {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
         try {
