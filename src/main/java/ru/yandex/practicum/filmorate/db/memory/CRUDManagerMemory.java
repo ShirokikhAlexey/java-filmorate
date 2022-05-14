@@ -11,14 +11,14 @@ public class CRUDManagerMemory implements CRUDManager {
     private static UserCRUD<User, Integer> userCRUD;
 
     public FilmCRUD<Film, Integer> getFilmCRUD() {
-        if (filmCRUD == null){
+        if (filmCRUD == null) {
             filmCRUD = new FilmCRUDMemory();
         }
         return filmCRUD;
     }
 
     public UserCRUD<User, Integer> getUserCRUD() {
-        if (userCRUD == null){
+        if (userCRUD == null) {
             userCRUD = new UserCRUDMemory();
         }
         return userCRUD;

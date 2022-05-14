@@ -7,10 +7,11 @@ import ru.yandex.practicum.filmorate.db.dbManager;
 
 @SpringBootApplication
 public class FilmorateApplication {
-	public static CRUDManager db;
-	public static void main(String[] args) {
-		db = dbManager.getMemoryManager();
-		SpringApplication.run(FilmorateApplication.class, args);
-	}
+    public static CRUDManager db;
+
+    public static void main(String[] args) {
+        db = dbManager.getMemoryManager();
+        SpringApplication.run(FilmorateApplication.class, args);
+    }
 
 }

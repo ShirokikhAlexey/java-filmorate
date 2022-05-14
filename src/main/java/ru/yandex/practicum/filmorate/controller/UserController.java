@@ -16,11 +16,11 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 @RequestMapping("/user")
 public class UserController {
     @PostMapping
-    public User create(@RequestBody User user){
+    public User create(@RequestBody User user) {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        try{
+        try {
             connection.create(user);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             return null;
         }
         log.info("Добавлен пользователь {}", user.toString());
@@ -28,19 +28,19 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@RequestBody User user){
+    public User update(@RequestBody User user) {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        try{
+        try {
             connection.update(user);
-        } catch (NotFoundError e){
-            try{
+        } catch (NotFoundError e) {
+            try {
                 connection.create(user);
             } catch (ValidationException exception) {
                 return null;
             }
             log.info("Добавлен пользователь {}", user.toString());
             return user;
-        } catch (ValidationException exception){
+        } catch (ValidationException exception) {
             return null;
         }
         log.info("Изменен пользователь {}", user.toString());
@@ -48,11 +48,11 @@ public class UserController {
     }
 
     @GetMapping(value = "/users")
-    public List<User> findAll(){
+    public List<User> findAll() {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        try{
+        try {
             return connection.readAll();
-        } catch (NotFoundError e){
+        } catch (NotFoundError e) {
             return null;
         }
 

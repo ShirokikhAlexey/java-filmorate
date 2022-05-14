@@ -16,11 +16,11 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 @RequestMapping("/film")
 public class FilmController {
     @PostMapping
-    public Film create(@RequestBody Film film){
+    public Film create(@RequestBody Film film) {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {
             connection.create(film);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             return null;
         }
         log.info("Добавлен фильм {}", film.toString());
@@ -28,19 +28,19 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@RequestBody Film film){
+    public Film update(@RequestBody Film film) {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
-        try{
+        try {
             connection.update(film);
-        } catch (NotFoundError e){
-            try{
+        } catch (NotFoundError e) {
+            try {
                 connection.create(film);
-            } catch (ValidationException exception){
+            } catch (ValidationException exception) {
                 return null;
             }
             log.info("Добавлен фильм {}", film.toString());
             return film;
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             return null;
         }
         log.info("Изменен фильм {}", film.toString());
@@ -48,9 +48,9 @@ public class FilmController {
     }
 
     @GetMapping(value = "/films")
-    public List<Film> findAll(){
+    public List<Film> findAll() {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
-        try{
+        try {
             return connection.readAll();
         } catch (NotFoundError e) {
             return null;

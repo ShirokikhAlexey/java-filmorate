@@ -12,13 +12,13 @@ import java.util.List;
 public class UserCRUDMemory implements UserCRUD<User, Integer> {
     private HashMap<Integer, User> db;
 
-    public UserCRUDMemory(){
+    public UserCRUDMemory() {
         this.db = new HashMap<>();
     }
 
     @Override
-    public User read(Integer id) throws NotFoundError{
-        if (db.containsKey(id)){
+    public User read(Integer id) throws NotFoundError {
+        if (db.containsKey(id)) {
             return db.get(id);
         }
         throw new NotFoundError();
@@ -31,9 +31,9 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void update(User updatedObject) throws NotFoundError, ValidationException{
+    public void update(User updatedObject) throws NotFoundError, ValidationException {
         this.validate(updatedObject);
-        if (db.containsKey(updatedObject.getId())){
+        if (db.containsKey(updatedObject.getId())) {
             db.put(updatedObject.getId(), updatedObject);
         } else {
             throw new NotFoundError();
@@ -41,8 +41,8 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void delete(Integer id) throws NotFoundError{
-        if (db.containsKey(id)){
+    public void delete(Integer id) throws NotFoundError {
+        if (db.containsKey(id)) {
             db.remove(id);
         } else {
             throw new NotFoundError();
@@ -51,7 +51,7 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
 
     @Override
     public List<User> readAll() throws NotFoundError {
-        if (db.isEmpty()){
+        if (db.isEmpty()) {
             throw new NotFoundError();
         } else {
             return new ArrayList<>(db.values());
