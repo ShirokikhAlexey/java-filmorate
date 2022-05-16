@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
-import ru.yandex.practicum.filmorate.error.NotFoundError;
+import ru.yandex.practicum.filmorate.error.NotFoundException;
 import ru.yandex.practicum.filmorate.error.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -37,7 +37,7 @@ public class FilmController {
             }
             return film;
 
-        } catch (NotFoundError e) {
+        } catch (NotFoundException e) {
             return null;
         }
     }
@@ -47,7 +47,7 @@ public class FilmController {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {
             return connection.readAll();
-        } catch (NotFoundError e) {
+        } catch (NotFoundException e) {
             return null;
         }
 

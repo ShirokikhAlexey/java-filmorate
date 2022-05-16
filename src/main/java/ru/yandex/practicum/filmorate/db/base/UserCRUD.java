@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.db.base;
 
-import ru.yandex.practicum.filmorate.error.NotFoundError;
+import ru.yandex.practicum.filmorate.error.NotFoundException;
 import ru.yandex.practicum.filmorate.error.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface UserCRUD<M, K> extends BaseCRUD<M, K> {
-    List<M> readAll() throws NotFoundError;
+    List<M> readAll() throws NotFoundException;
 
     default void validate(User user) throws ValidationException {
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {

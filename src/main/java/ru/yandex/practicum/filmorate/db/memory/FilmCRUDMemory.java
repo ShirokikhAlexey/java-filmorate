@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
 import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
-import ru.yandex.practicum.filmorate.error.NotFoundError;
+import ru.yandex.practicum.filmorate.error.NotFoundException;
 import ru.yandex.practicum.filmorate.error.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -17,11 +17,11 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
-    public Film read(Integer id) throws NotFoundError {
+    public Film read(Integer id) throws NotFoundException {
         if (db.containsKey(id)) {
             return db.get(id);
         }
-        throw new NotFoundError();
+        throw new NotFoundException();
     }
 
     @Override
@@ -31,21 +31,21 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
-    public void update(Film updatedObject) throws NotFoundError, ValidationException {
+    public void update(Film updatedObject) throws NotFoundException, ValidationException {
         this.validate(updatedObject);
         if (db.containsKey(updatedObject.getId())) {
             db.put(updatedObject.getId(), updatedObject);
         } else {
-            throw new NotFoundError();
+            throw new NotFoundException();
         }
     }
 
     @Override
-    public void delete(Integer id) throws NotFoundError {
+    public void delete(Integer id) throws NotFoundException {
         if (db.containsKey(id)) {
             db.remove(id);
         } else {
-            throw new NotFoundError();
+            throw new NotFoundException();
         }
     }
 
@@ -55,9 +55,9 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
-    public List<Film> readAll() throws NotFoundError {
+    public List<Film> readAll() throws NotFoundException {
         if (db.isEmpty()) {
-            throw new NotFoundError();
+            throw new NotFoundException();
         } else {
             return new ArrayList<>(db.values());
         }
