@@ -7,8 +7,8 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface UserCRUD<model, primaryKeyType> extends BaseCRUD<model, primaryKeyType> {
-    List<model> readAll() throws NotFoundError;
+public interface UserCRUD<M, K> extends BaseCRUD<M, K> {
+    List<M> readAll() throws NotFoundError;
 
     default void validate(User user) throws ValidationException {
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {
