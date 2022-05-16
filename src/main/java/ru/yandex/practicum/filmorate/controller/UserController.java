@@ -28,14 +28,17 @@ public class UserController {
     public User update(@RequestBody User user) throws ValidationException {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
         try {
-            connection.update(user);
-        } catch (NotFoundError e) {
-            connection.create(user);
-            log.info("Добавлен пользователь {}", user.toString());
+            if (connection.contains(user.getId())) {
+                connection.update(user);
+                log.info("Изменен пользователь {}", user.toString());
+            } else {
+                connection.create(user);
+                log.info("Добавлен пользователь {}", user.toString());
+            }
             return user;
+        } catch (NotFoundError e) {
+            return null;
         }
-        log.info("Изменен пользователь {}", user.toString());
-        return user;
     }
 
     @GetMapping

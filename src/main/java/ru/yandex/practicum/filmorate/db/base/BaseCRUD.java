@@ -11,4 +11,6 @@ public interface BaseCRUD<model, primaryKeyType> {
     void update(model updatedObject) throws NotFoundError, ValidationException;
 
     void delete(primaryKeyType id) throws NotFoundError;
+
+    boolean contains(primaryKeyType id);
 }

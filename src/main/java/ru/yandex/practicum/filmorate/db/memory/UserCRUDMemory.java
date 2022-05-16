@@ -57,4 +57,9 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
             return new ArrayList<>(db.values());
         }
     }
+
+    @Override
+    public boolean contains(Integer id) {
+        return db.containsKey(id);
+    }
 }

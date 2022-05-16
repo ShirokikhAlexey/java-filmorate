@@ -28,14 +28,18 @@ public class FilmController {
     public Film update(@RequestBody Film film) throws ValidationException {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {
-            connection.update(film);
-        } catch (NotFoundError e) {
-            connection.create(film);
-            log.info("Добавлен фильм {}", film.toString());
+            if (connection.contains(film.getId())) {
+                connection.update(film);
+                log.info("Изменен фильм {}", film.toString());
+            } else {
+                connection.create(film);
+                log.info("Добавлен фильм {}", film.toString());
+            }
             return film;
+
+        } catch (NotFoundError e) {
+            return null;
         }
-        log.info("Изменен фильм {}", film.toString());
-        return film;
     }
 
     @GetMapping

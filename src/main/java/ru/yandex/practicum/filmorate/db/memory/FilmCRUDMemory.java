@@ -50,6 +50,11 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
+    public boolean contains(Integer id) {
+        return db.containsKey(id);
+    }
+
+    @Override
     public List<Film> readAll() throws NotFoundError {
         if (db.isEmpty()) {
             throw new NotFoundError();
