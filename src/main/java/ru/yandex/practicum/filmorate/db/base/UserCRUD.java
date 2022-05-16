@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface UserCRUD<M, K> extends BaseCRUD<M, K> {
-    List<M> readAll() throws NotFoundException;
+    List<M> readAll();
 
     default void validate(User user) throws ValidationException {
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {

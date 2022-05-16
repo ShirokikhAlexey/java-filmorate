@@ -55,11 +55,7 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     }
 
     @Override
-    public List<Film> readAll() throws NotFoundException {
-        if (db.isEmpty()) {
-            throw new NotFoundException();
-        } else {
-            return new ArrayList<>(db.values());
-        }
+    public List<Film> readAll() {
+        return new ArrayList<>(db.values());
     }
 }

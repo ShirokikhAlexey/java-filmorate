@@ -44,11 +44,6 @@ public class UserController {
     @GetMapping
     public List<User> findAll() {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
-        try {
-            return connection.readAll();
-        } catch (NotFoundException e) {
-            return null;
-        }
-
+        return connection.readAll();
     }
 }

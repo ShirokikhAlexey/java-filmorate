@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FilmCRUD<M, K> extends BaseCRUD<M, K> {
-    List<M> readAll() throws NotFoundException;
+    List<M> readAll();
 
     default void validate(Film film) throws ValidationException {
         if (film.getName().isBlank()) {

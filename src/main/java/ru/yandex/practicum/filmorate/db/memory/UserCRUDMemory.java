@@ -50,12 +50,8 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public List<User> readAll() throws NotFoundException {
-        if (db.isEmpty()) {
-            throw new NotFoundException();
-        } else {
-            return new ArrayList<>(db.values());
-        }
+    public List<User> readAll() {
+        return new ArrayList<>(db.values());
     }
 
     @Override
