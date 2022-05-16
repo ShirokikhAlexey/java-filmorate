@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 public interface CRUDManager {
 
-    public FilmCRUD<Film, Integer> getFilmCRUD();
+    FilmCRUD<Film, Integer> getFilmCRUD();
 
-    public UserCRUD<User, Integer> getUserCRUD();
+    UserCRUD<User, Integer> getUserCRUD();
 }
