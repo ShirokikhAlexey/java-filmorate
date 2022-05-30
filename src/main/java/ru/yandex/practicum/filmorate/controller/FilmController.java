@@ -38,6 +38,7 @@ public class FilmController {
             return film;
 
         } catch (NotFoundException e) {
+            log.info("Попытка обновления несуществующей записи: {}", film.toString());
             return null;
         }
     }
