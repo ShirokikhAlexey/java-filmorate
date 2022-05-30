@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.db.base.UserCRUD;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -38,7 +40,8 @@ public class UserController {
             return user;
         } catch (NotFoundException e) {
             log.info("Попытка обновления несуществующего пользователя: {}", user.toString());
-            return null;
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
