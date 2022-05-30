@@ -37,6 +37,7 @@ public class UserController {
             }
             return user;
         } catch (NotFoundException e) {
+            log.info("Попытка обновления несуществующего пользователя: {}", user.toString());
             return null;
         }
     }
