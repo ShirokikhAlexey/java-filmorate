@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.db.base;
 
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.error.NotFoundException;
+import ru.yandex.practicum.filmorate.error.ValidationException;
 
 public interface BaseCRUD<M, K> {
     M read(K id) throws NotFoundException;
