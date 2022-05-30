@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.db.memory.FilmCRUDMemory;
@@ -10,6 +9,8 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class FilmCRUDMemoryTest {
@@ -28,13 +29,13 @@ class FilmCRUDMemoryTest {
     }
 
     @Test
-    void validateName() throws ValidationException{
+    void validateName() throws ValidationException {
         Film film = new Film(1, "", "Test", LocalDate.of(2000, 1, 1),
                 Duration.ofHours(1));
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setName("    ");
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setName("ValidName");
         db.validate(film);
@@ -44,14 +45,14 @@ class FilmCRUDMemoryTest {
     void validateDescription() throws ValidationException {
         Film film = new Film(1, "Test", "", LocalDate.of(2000, 1, 1),
                 Duration.ofHours(1));
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDescription("   ");
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         String invalidDescr = getRandomString(201);
         film.setDescription(invalidDescr);
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         String validDescr = getRandomString(200);
         film.setDescription(validDescr);
@@ -63,7 +64,7 @@ class FilmCRUDMemoryTest {
     void validateDate() throws ValidationException {
         Film film = new Film(1, "Test", "test", LocalDate.of(1895, 12, 27),
                 Duration.ofHours(1));
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setReleaseDate(LocalDate.of(1895, 12, 28));
         db.validate(film);
@@ -73,10 +74,10 @@ class FilmCRUDMemoryTest {
     void validateDuration() throws ValidationException {
         Film film = new Film(1, "Test", "test", LocalDate.of(1995, 12, 27),
                 Duration.ofHours(-1));
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDuration(Duration.ofHours(0));
-        Assertions.assertThrows(ValidationException.class,  () -> db.validate(film));
+        assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDuration(Duration.ofHours(10));
         db.validate(film);
