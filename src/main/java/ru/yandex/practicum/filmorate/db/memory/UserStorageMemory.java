@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
-import ru.yandex.practicum.filmorate.db.base.UserCRUD;
+import ru.yandex.practicum.filmorate.db.base.UserStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class UserCRUDMemory implements UserCRUD<User, Integer> {
+public class UserStorageMemory implements UserStorage<User, Integer> {
     private HashMap<Integer, User> db;
     private int autoincrement = 0;
 
-    public UserCRUDMemory() {
+    public UserStorageMemory() {
         this.db = new HashMap<>();
     }
 

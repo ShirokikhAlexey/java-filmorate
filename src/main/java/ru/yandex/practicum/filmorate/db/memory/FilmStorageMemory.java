@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
-import ru.yandex.practicum.filmorate.db.base.FilmCRUD;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -9,11 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
+@Component
+public class FilmStorageMemory implements FilmStorage<Film, Integer> {
     private HashMap<Integer, Film> db;
     private int autoincrement = 0;
 
-    public FilmCRUDMemory() {
+    public FilmStorageMemory() {
         this.db = new HashMap<>();
     }
 

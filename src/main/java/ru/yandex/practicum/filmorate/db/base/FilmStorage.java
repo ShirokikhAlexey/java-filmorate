@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface FilmCRUD<M, K> extends BaseCRUD<M, K> {
+public interface FilmStorage<M, K> extends BaseStorage<M, K> {
     List<M> readAll();
 
     default void validate(Film film) throws ValidationException {

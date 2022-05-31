@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.db.memory.FilmCRUDMemory;
+import ru.yandex.practicum.filmorate.db.memory.FilmStorageMemory;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class FilmCRUDMemoryTest {
-    FilmCRUDMemory db = new FilmCRUDMemory();
+    FilmStorageMemory db = new FilmStorageMemory();
 
     private String getRandomString(int strLength) {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
