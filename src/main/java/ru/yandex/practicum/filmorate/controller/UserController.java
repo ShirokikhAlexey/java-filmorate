@@ -30,18 +30,20 @@ public class UserController {
     public User update(@RequestBody User user) throws ValidationException {
         UserCRUD<User, Integer> connection = db.getUserCRUD();
         try {
-            if (connection.contains(user.getId())) {
+            if (user.getId() != 0 && connection.contains(user.getId())) {
                 connection.update(user);
                 log.info("Изменен пользователь {}", user.toString());
-            } else {
+            } else if (user.getId() == 0) {
                 connection.create(user);
                 log.info("Добавлен пользователь {}", user.toString());
+            } else {
+                throw new NotFoundException();
             }
             return user;
         } catch (NotFoundException e) {
             log.info("Попытка обновления несуществующего пользователя: {}", user.toString());
 
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

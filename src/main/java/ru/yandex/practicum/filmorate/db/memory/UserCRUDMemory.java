@@ -11,6 +11,7 @@ import java.util.List;
 
 public class UserCRUDMemory implements UserCRUD<User, Integer> {
     private HashMap<Integer, User> db;
+    private int autoincrement = 0;
 
     public UserCRUDMemory() {
         this.db = new HashMap<>();
@@ -27,7 +28,16 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     @Override
     public void create(User object) throws ValidationException {
         this.validate(object);
-        db.put(object.getId(), object);
+        if (object.getId() == 0) {
+            autoincrement += 1;
+            db.put(autoincrement, object);
+            object.setId(autoincrement);
+        } else {
+            if (db.containsKey(object.getId())) {
+                throw new ValidationException();
+            }
+            db.put(object.getId(), object);
+        }
     }
 
     @Override

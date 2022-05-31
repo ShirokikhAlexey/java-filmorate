@@ -11,6 +11,7 @@ import java.util.List;
 
 public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     private HashMap<Integer, Film> db;
+    private int autoincrement = 0;
 
     public FilmCRUDMemory() {
         this.db = new HashMap<>();
@@ -27,7 +28,16 @@ public class FilmCRUDMemory implements FilmCRUD<Film, Integer> {
     @Override
     public void create(Film object) throws ValidationException {
         this.validate(object);
-        db.put(object.getId(), object);
+        if (object.getId() == 0) {
+            autoincrement += 1;
+            db.put(autoincrement, object);
+            object.setId(autoincrement);
+        } else {
+            if (db.containsKey(object.getId())) {
+                throw new ValidationException();
+            }
+            db.put(object.getId(), object);
+        }
     }
 
     @Override

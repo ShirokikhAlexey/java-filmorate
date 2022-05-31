@@ -30,18 +30,20 @@ public class FilmController {
     public Film update(@RequestBody Film film) throws ValidationException {
         FilmCRUD<Film, Integer> connection = db.getFilmCRUD();
         try {
-            if (connection.contains(film.getId())) {
+            if (film.getId() != 0 && connection.contains(film.getId())) {
                 connection.update(film);
                 log.info("Изменен фильм {}", film.toString());
-            } else {
+            } else if (film.getId() == 0) {
                 connection.create(film);
                 log.info("Добавлен фильм {}", film.toString());
+            } else {
+                throw new NotFoundException();
             }
             return film;
-
         } catch (NotFoundException e) {
             log.info("Попытка обновления несуществующей записи: {}", film.toString());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
