@@ -1,15 +1,15 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.List;
 
@@ -19,6 +19,13 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping
     public User create(@RequestBody User user) throws ValidationException {
         UserStorage<User, Integer> connection = db.getUserCRUD();
@@ -60,4 +67,27 @@ public class UserController {
         UserStorage<User, Integer> connection = db.getUserCRUD();
         return connection.read(id);
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException,
+            NotFoundException {
+        return userService.sendFriendRequest(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException,
+            NotFoundException {
+        return userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable int id) throws NotFoundException {
+        return userService.getUserFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) throws NotFoundException {
+        return userService.getCommonFriends(id, otherId);
+    }
+
 }
