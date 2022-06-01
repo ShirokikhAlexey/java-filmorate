@@ -13,6 +13,7 @@ public class User {
     private String name;
     private LocalDate birthday;
     private Set<Integer> friendsList;
+    private Set<Integer> likedMovies;
 
     public User(int id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
