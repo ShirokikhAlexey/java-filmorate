@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Component
 public class UserStorageMemory implements UserStorage<User, Integer> {
     private HashMap<Integer, User> db;
     private int autoincrement = 0;
