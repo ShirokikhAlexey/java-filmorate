@@ -10,12 +10,10 @@ import ru.yandex.practicum.filmorate.model.User;
 
 @Service
 public class UserService {
-    private final StorageManagerMemory dbManager;
-    private final UserStorage dbSession;
+    private final UserStorage<User, Integer> dbSession;
 
     @Autowired
     public UserService(StorageManagerMemory dbManager) {
-        this.dbManager = dbManager;
         this.dbSession = dbManager.getUserCRUD();
     }
 

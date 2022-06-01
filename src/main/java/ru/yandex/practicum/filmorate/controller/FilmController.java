@@ -52,4 +52,10 @@ public class FilmController {
         FilmStorage<Film, Integer> connection = db.getFilmCRUD();
         return connection.readAll();
     }
+
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable int id) throws NotFoundException {
+        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
+        return connection.read(id);
+    }
 }
