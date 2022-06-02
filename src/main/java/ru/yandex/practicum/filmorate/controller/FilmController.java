@@ -52,7 +52,7 @@ public class FilmController {
         } catch (NotFoundException e) {
             log.info("Попытка обновления несуществующей записи: {}", film.toString());
 
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -63,25 +63,35 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film getFilm(@PathVariable int id) throws NotFoundException {
-        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
-        return connection.read(id);
+    public Film getFilm(@PathVariable int id) {
+        try {
+            FilmStorage<Film, Integer> connection = db.getFilmCRUD();
+            return connection.read(id);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Film addLike(@PathVariable int id, @PathVariable int userId) throws ValidationException,
-            NotFoundException {
-        return filmService.likeMovie(id, userId);
+    public Film addLike(@PathVariable int id, @PathVariable int userId) throws ValidationException {
+        try {
+            return filmService.likeMovie(id, userId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable int id, @PathVariable int userId) throws ValidationException,
-            NotFoundException {
-        return filmService.deleteLike(id, userId);
+    public Film deleteLike(@PathVariable int id, @PathVariable int userId) throws ValidationException {
+        try {
+            return filmService.deleteLike(id, userId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/popular")
-    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) throws NotFoundException {
+    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
         FilmStorage<Film, Integer> connection = db.getFilmCRUD();
         return filmService.getPopular(count);
     }

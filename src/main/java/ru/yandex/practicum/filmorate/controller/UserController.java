@@ -52,7 +52,7 @@ public class UserController {
         } catch (NotFoundException e) {
             log.info("Попытка обновления несуществующего пользователя: {}", user.toString());
 
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -63,31 +63,49 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable int id) throws NotFoundException {
-        UserStorage<User, Integer> connection = db.getUserCRUD();
-        return connection.read(id);
+    public User getUser(@PathVariable int id) {
+        try {
+            UserStorage<User, Integer> connection = db.getUserCRUD();
+            return connection.read(id);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException,
-            NotFoundException {
-        return userService.sendFriendRequest(id, friendId);
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException {
+        try {
+            return userService.sendFriendRequest(id, friendId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException,
-            NotFoundException {
-        return userService.deleteFriend(id, friendId);
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) throws ValidationException {
+        try {
+            return userService.deleteFriend(id, friendId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> getFriends(@PathVariable int id) throws NotFoundException {
-        return userService.getUserFriends(id);
+    public List<User> getFriends(@PathVariable int id) {
+        try {
+            return userService.getUserFriends(id);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) throws NotFoundException {
-        return userService.getCommonFriends(id, otherId);
+    public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+        try {
+            return userService.getCommonFriends(id, otherId);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

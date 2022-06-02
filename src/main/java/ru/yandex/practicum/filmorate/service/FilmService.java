@@ -39,8 +39,13 @@ public class FilmService {
         Film film = dbSessionFilm.read(filmId);
         User user = dbSessionUser.read(userId);
 
-        film.getLikes().remove(user.getId());
-        user.getLikedMovies().remove(film.getId());
+        if (film.getLikes().contains(userId)) {
+            film.getLikes().remove(user.getId());
+        }
+        if (user.getLikedMovies().remove(filmId)) {
+            user.getLikedMovies().remove(film.getId());
+        }
+
         dbSessionFilm.update(film);
         dbSessionUser.update(user);
         return film;
