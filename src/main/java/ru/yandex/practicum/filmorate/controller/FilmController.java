@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -8,6 +9,7 @@ import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
 
@@ -17,6 +19,13 @@ import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
+    private final FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
+
     @PostMapping
     public Film create(@RequestBody Film film) throws ValidationException {
         FilmStorage<Film, Integer> connection = db.getFilmCRUD();
@@ -57,5 +66,23 @@ public class FilmController {
     public Film getFilm(@PathVariable int id) throws NotFoundException {
         FilmStorage<Film, Integer> connection = db.getFilmCRUD();
         return connection.read(id);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLike(@PathVariable int id, @PathVariable int userId) throws ValidationException,
+            NotFoundException {
+        return filmService.likeMovie(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable int id, @PathVariable int userId) throws ValidationException,
+            NotFoundException {
+        return filmService.deleteLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) throws NotFoundException {
+        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
+        return filmService.getPopular(count);
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class Film {
+public class Film implements Comparable<Film> {
     private int id;
     private String name;
     private String description;
@@ -25,5 +25,10 @@ public class Film {
 
     public Long getDuration() {
         return this.duration.toSeconds();
+    }
+
+    @Override
+    public int compareTo(Film o) {
+        return Integer.compare(this.likes.size(), o.likes.size());
     }
 }

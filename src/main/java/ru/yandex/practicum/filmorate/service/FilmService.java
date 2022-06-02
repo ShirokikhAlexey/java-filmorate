@@ -10,6 +10,9 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class FilmService {
     private final FilmStorage<Film, Integer> dbSessionFilm;
@@ -21,10 +24,35 @@ public class FilmService {
         this.dbSessionUser = dbManager.getUserCRUD();
     }
 
-    public void likeMovie(User user, Film film) throws ValidationException, NotFoundException {
+    public Film likeMovie(int userId, int filmId) throws ValidationException, NotFoundException {
+        Film film = dbSessionFilm.read(filmId);
+        User user = dbSessionUser.read(userId);
+
         film.getLikes().add(user.getId());
         user.getLikedMovies().add(film.getId());
         dbSessionFilm.update(film);
         dbSessionUser.update(user);
+        return film;
+    }
+
+    public Film deleteLike(int filmId, int userId) throws ValidationException, NotFoundException {
+        Film film = dbSessionFilm.read(filmId);
+        User user = dbSessionUser.read(userId);
+
+        film.getLikes().remove(user.getId());
+        user.getLikedMovies().remove(film.getId());
+        dbSessionFilm.update(film);
+        dbSessionUser.update(user);
+        return film;
+    }
+
+    public List<Film> getPopular(int count) {
+        List<Film> allFilms = dbSessionFilm.readAll();
+        Collections.sort(allFilms);
+
+        if (allFilms.size() > count) {
+            return allFilms.subList(0, count);
+        }
+        return allFilms;
     }
 }

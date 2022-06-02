@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.base.StorageManager;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
+import ru.yandex.practicum.filmorate.db.base.StorageManager;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
