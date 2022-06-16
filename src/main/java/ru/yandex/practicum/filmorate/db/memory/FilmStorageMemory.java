@@ -1,24 +1,26 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
-import ru.yandex.practicum.filmorate.db.base.UserCRUD;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class UserCRUDMemory implements UserCRUD<User, Integer> {
-    private HashMap<Integer, User> db;
+@Component
+public class FilmStorageMemory implements FilmStorage<Film, Integer> {
+    private HashMap<Integer, Film> db;
     private int autoincrement = 0;
 
-    public UserCRUDMemory() {
+    public FilmStorageMemory() {
         this.db = new HashMap<>();
     }
 
     @Override
-    public User read(Integer id) throws NotFoundException {
+    public Film read(Integer id) throws NotFoundException {
         if (db.containsKey(id)) {
             return db.get(id);
         }
@@ -26,7 +28,7 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void create(User object) throws ValidationException {
+    public void create(Film object) throws ValidationException {
         this.validate(object);
         if (object.getId() == 0) {
             autoincrement += 1;
@@ -41,7 +43,7 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public void update(User updatedObject) throws NotFoundException, ValidationException {
+    public void update(Film updatedObject) throws NotFoundException, ValidationException {
         this.validate(updatedObject);
         if (db.containsKey(updatedObject.getId())) {
             db.put(updatedObject.getId(), updatedObject);
@@ -60,12 +62,12 @@ public class UserCRUDMemory implements UserCRUD<User, Integer> {
     }
 
     @Override
-    public List<User> readAll() {
-        return new ArrayList<>(db.values());
+    public boolean contains(Integer id) {
+        return db.containsKey(id);
     }
 
     @Override
-    public boolean contains(Integer id) {
-        return db.containsKey(id);
+    public List<Film> readAll() {
+        return new ArrayList<>(db.values());
     }
 }

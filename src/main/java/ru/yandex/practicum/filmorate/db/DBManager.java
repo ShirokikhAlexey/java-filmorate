@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.db;
 
-import ru.yandex.practicum.filmorate.db.memory.CRUDManagerMemory;
+import ru.yandex.practicum.filmorate.db.memory.StorageManagerMemory;
 
 public class DBManager {
-    public static CRUDManagerMemory getMemoryManager() {
-        return new CRUDManagerMemory();
+    public static StorageManagerMemory getMemoryManager() {
+        return new StorageManagerMemory();
     }
 }

@@ -3,9 +3,9 @@ package ru.yandex.practicum.filmorate.db.base;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-public interface CRUDManager {
+public interface StorageManager {
 
-    FilmCRUD<Film, Integer> getFilmCRUD();
+    FilmStorage<Film, Integer> getFilmCRUD();
 
-    UserCRUD<User, Integer> getUserCRUD();
+    UserStorage<User, Integer> getUserCRUD();
 }

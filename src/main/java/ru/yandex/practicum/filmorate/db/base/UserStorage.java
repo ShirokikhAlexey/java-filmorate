@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface UserCRUD<M, K> extends BaseCRUD<M, K> {
+public interface UserStorage<M, K> extends BaseStorage<M, K> {
     List<M> readAll();
 
     default void validate(User user) throws ValidationException {

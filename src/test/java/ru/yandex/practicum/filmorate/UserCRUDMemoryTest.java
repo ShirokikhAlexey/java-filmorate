@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.db.memory.UserCRUDMemory;
+import ru.yandex.practicum.filmorate.db.memory.UserStorageMemory;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class UserCRUDMemoryTest {
-    UserCRUDMemory db = new UserCRUDMemory();
+    UserStorageMemory db = new UserStorageMemory();
 
     @Test
     void validateEmail() throws ValidationException {
