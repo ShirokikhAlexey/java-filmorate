@@ -39,7 +39,7 @@ public class UserDbStorage implements UserStorage<User, Integer> {
     public void update(User updatedObject) throws NotFoundException, ValidationException {
         String sql = "UPDATE users SET name=?, email=?, login=?, birthday=? WHERE id=?";
         jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getEmail(),
-                updatedObject.getLogin(), updatedObject.getBirthday());
+                updatedObject.getLogin(), updatedObject.getBirthday(), updatedObject.getId());
     }
 
     @Override

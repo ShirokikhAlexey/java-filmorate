@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,23 +24,26 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
 
     @Override
     public Film read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM films WHERE id = ?";
+        String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
+                "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
+                "r.description as 'ratingDescription' " +
+                "FROM films f JOIN rating r ON r.id = f.rating WHERE f.id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
     }
 
     @Override
     public void create(Film object) throws ValidationException {
-        String sql = "INSERT INTO films (name, description, releaseDate, duration) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO films (name, description, releaseDate, duration, rating) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, object.getName(), object.getDescription(), object.getReleaseDate(),
-                object.getDuration());
+                object.getDuration(), object.getRatingID());
     }
 
     @Override
     public void update(Film updatedObject) throws NotFoundException, ValidationException {
         String sql = "UPDATE films SET name=?, description=?, releaseDate=?, duration=? WHERE id=?";
         jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(),
-                updatedObject.getReleaseDate(), updatedObject.getDuration());
+                updatedObject.getReleaseDate(), updatedObject.getDuration(), updatedObject.getId());
     }
 
     @Override
@@ -57,7 +61,10 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
 
     @Override
     public List<Film> readAll() {
-        String sql = "SELECT * FROM films";
+        String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
+                "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
+                "r.description as 'ratingDescription' " +
+                "FROM films";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }
@@ -68,7 +75,11 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String description = rs.getString("description");
         LocalDate releaseDate = rs.getDate("releaseDate").toLocalDate();
         Duration duration = Duration.ofMinutes((long) rs.getFloat("duration"));
+        Integer ratingID = rs.getInt("ratingID");
+        String ratingName = rs.getString("ratingName");
+        String ratingDescription = rs.getString("ratingDescription");
 
-        return new Film(id,  name, description, releaseDate, duration);
+        return new Film(id,  name, description, releaseDate, duration, ratingID,
+                new Rating(ratingID, ratingName, ratingDescription));
     }
 }
