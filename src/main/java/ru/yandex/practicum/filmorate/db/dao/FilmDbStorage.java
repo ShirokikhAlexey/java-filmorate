@@ -12,7 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class FilmDbStorage implements FilmStorage<Film, Integer> {
@@ -27,7 +30,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
                 "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
                 "r.description as 'ratingDescription' " +
-                "FROM films f JOIN rating r ON r.id = f.rating WHERE f.id = ?";
+                "FROM films f JOIN ratings r ON r.id = f.rating WHERE f.id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
     }
@@ -64,7 +67,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
                 "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
                 "r.description as 'ratingDescription' " +
-                "FROM films";
+                "FROM films f JOIN ratings r ON r.id = f.rating";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }

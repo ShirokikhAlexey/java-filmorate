@@ -1,6 +1,6 @@
-package ru.yandex.practicum.filmorate.db.memory;
+package ru.yandex.practicum.filmorate.db.dao;
 
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.db.base.StorageManager;
 import ru.yandex.practicum.filmorate.db.base.UserFilmLikesStorage;
@@ -9,29 +9,24 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.UserFilmLikes;
 
-@Component
-public class StorageManagerMemory implements StorageManager {
-    private static FilmStorage<Film, Integer> filmCRUD;
-    private static UserStorage<User, Integer> userCRUD;
+public class StorageManagerDb implements StorageManager {
+    private JdbcTemplate jdbcTemplate;
 
+    public StorageManagerDb(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
     @Override
     public FilmStorage<Film, Integer> getFilmCRUD() {
-        if (filmCRUD == null) {
-            filmCRUD = new FilmStorageMemory();
-        }
-        return filmCRUD;
+        return new FilmDbStorage(this.jdbcTemplate);
     }
 
     @Override
     public UserStorage<User, Integer> getUserCRUD() {
-        if (userCRUD == null) {
-            userCRUD = new UserStorageMemory();
-        }
-        return userCRUD;
+        return new UserDbStorage(this.jdbcTemplate);
     }
 
     @Override
     public UserFilmLikesStorage<UserFilmLikes, Integer> getUserFilmLikesCRUD() {
-        return null;
+        return new UserFilmLikesDbStorage(this.jdbcTemplate);
     }
 }

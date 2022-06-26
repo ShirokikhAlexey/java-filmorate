@@ -4,11 +4,9 @@ import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
-public class Film implements Comparable<Film> {
+public class Film {
     private Integer id;
     private String name;
     private String description;
@@ -16,7 +14,6 @@ public class Film implements Comparable<Film> {
     private Duration duration;
     private Integer ratingID;
     private Rating rating;
-    private Set<Integer> likes = new HashSet<>();
 
     public Film(String name, String description, LocalDate releaseDate, Duration duration, Integer ratingID) {
         this.id = null;
@@ -40,10 +37,5 @@ public class Film implements Comparable<Film> {
 
     public Long getDuration() {
         return this.duration.toMinutes();
-    }
-
-    @Override
-    public int compareTo(Film o) {
-        return Integer.compare(this.likes.size(), o.likes.size());
     }
 }
