@@ -22,7 +22,7 @@ public class RatingDbStorage implements RatingStorage<Rating, Integer> {
 
     @Override
     public Rating read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM ratings WHERE f.id = ?";
+        String sql = "SELECT * FROM ratings WHERE id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeRating(rs), id);
     }
