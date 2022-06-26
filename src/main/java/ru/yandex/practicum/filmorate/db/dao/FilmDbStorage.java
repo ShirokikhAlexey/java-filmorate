@@ -12,16 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class FilmDbStorage implements FilmStorage<Film, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
-    public FilmDbStorage(JdbcTemplate jdbcTemplate){
+    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -82,7 +79,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String ratingName = rs.getString("ratingName");
         String ratingDescription = rs.getString("ratingDescription");
 
-        return new Film(id,  name, description, releaseDate, duration, ratingID,
+        return new Film(id, name, description, releaseDate, duration, ratingID,
                 new Rating(ratingID, ratingName, ratingDescription));
     }
 }

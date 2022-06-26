@@ -1,11 +1,9 @@
 package ru.yandex.practicum.filmorate.db.memory;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.base.FilmStorage;
-import ru.yandex.practicum.filmorate.db.base.StorageManager;
-import ru.yandex.practicum.filmorate.db.base.UserFilmLikesStorage;
-import ru.yandex.practicum.filmorate.db.base.UserStorage;
+import ru.yandex.practicum.filmorate.db.base.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.UserFilmLikes;
 
@@ -32,6 +30,11 @@ public class StorageManagerMemory implements StorageManager {
 
     @Override
     public UserFilmLikesStorage<UserFilmLikes, Integer> getUserFilmLikesCRUD() {
+        return null;
+    }
+
+    @Override
+    public FriendsStorage<Friends, Integer> getFriendsCRUD() {
         return null;
     }
 }

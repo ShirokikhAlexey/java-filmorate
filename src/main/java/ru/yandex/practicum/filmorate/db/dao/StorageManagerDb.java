@@ -1,11 +1,9 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.db.base.FilmStorage;
-import ru.yandex.practicum.filmorate.db.base.StorageManager;
-import ru.yandex.practicum.filmorate.db.base.UserFilmLikesStorage;
-import ru.yandex.practicum.filmorate.db.base.UserStorage;
+import ru.yandex.practicum.filmorate.db.base.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.UserFilmLikes;
 
@@ -28,5 +26,10 @@ public class StorageManagerDb implements StorageManager {
     @Override
     public UserFilmLikesStorage<UserFilmLikes, Integer> getUserFilmLikesCRUD() {
         return new UserFilmLikesDbStorage(this.jdbcTemplate);
+    }
+
+    @Override
+    public FriendsStorage<Friends, Integer> getFriendsCRUD() {
+        return new FriendsDbStorage(this.jdbcTemplate);
     }
 }
