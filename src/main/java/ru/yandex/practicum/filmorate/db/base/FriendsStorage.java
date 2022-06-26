@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
 
-public interface FriendsStorage<M, K> extends BaseStorage<M, K>  {
+public interface FriendsStorage<M, K> extends BaseStorage<M, K> {
     void addFriend(K user, K friend) throws ValidationException;
 
     void deleteFriend(K user, K friend) throws NotFoundException;

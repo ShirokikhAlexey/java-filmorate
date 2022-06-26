@@ -7,9 +7,10 @@ import ru.yandex.practicum.filmorate.model.*;
 public class StorageManagerDb implements StorageManager {
     private JdbcTemplate jdbcTemplate;
 
-    public StorageManagerDb(JdbcTemplate jdbcTemplate){
+    public StorageManagerDb(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
     public FilmStorage<Film, Integer> getFilmCRUD() {
         return new FilmDbStorage(this.jdbcTemplate);

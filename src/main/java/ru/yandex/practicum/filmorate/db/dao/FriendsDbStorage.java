@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.UserFilmLikes;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,7 +15,7 @@ import java.util.List;
 public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
-    public FriendsDbStorage(JdbcTemplate jdbcTemplate){
+    public FriendsDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -38,7 +36,7 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
     public void update(Friends updatedObject) throws NotFoundException, ValidationException {
         String sql = "UPDATE friends SET user_id=?, friend_id=?, confirmed=?  WHERE id=?";
         jdbcTemplate.update(sql, updatedObject.getUserId(), updatedObject.getFriendId(),
-                updatedObject.isConfirmed() , updatedObject.getId());
+                updatedObject.isConfirmed(), updatedObject.getId());
     }
 
     @Override

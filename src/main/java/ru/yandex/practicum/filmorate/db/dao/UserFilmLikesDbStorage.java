@@ -18,9 +18,10 @@ import java.util.List;
 public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLikes, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
-    public UserFilmLikesDbStorage(JdbcTemplate jdbcTemplate){
+    public UserFilmLikesDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
     public UserFilmLikes read(Integer id) throws NotFoundException {
         String sql = "SELECT * FROM user_film_likes ufl WHERE ufl.id = ?";
@@ -69,14 +70,14 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
     }
 
     @Override
-    public HashSet<Integer> getFilmLikes(Integer filmId){
+    public HashSet<Integer> getFilmLikes(Integer filmId) {
         String sql = "SELECT user_id FROM user_film_likes WHERE film_id=?";
         List<Integer> data = jdbcTemplate.queryForList(sql, Integer.class, filmId);
         return new HashSet<>(data);
     }
 
     @Override
-    public HashSet<Integer> getUserLikes(Integer userId){
+    public HashSet<Integer> getUserLikes(Integer userId) {
         String sql = "SELECT film_id FROM user_film_likes WHERE user_id=?";
         List<Integer> data = jdbcTemplate.queryForList(sql, Integer.class, userId);
         return new HashSet<>(data);
@@ -114,7 +115,7 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
         String ratingName = rs.getString("ratingName");
         String ratingDescription = rs.getString("ratingDescription");
 
-        return new Film(id,  name, description, releaseDate, duration, ratingID,
+        return new Film(id, name, description, releaseDate, duration, ratingID,
                 new Rating(ratingID, ratingName, ratingDescription));
     }
 

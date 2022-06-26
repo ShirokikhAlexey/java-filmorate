@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.db.memory.StorageManagerMemory;
 public class DBManager {
     private static JdbcTemplate jdbcTemplate;
 
-    public DBManager(JdbcTemplate jdbcTemplate){
+    public DBManager(JdbcTemplate jdbcTemplate) {
         DBManager.jdbcTemplate = jdbcTemplate;
     }
 
