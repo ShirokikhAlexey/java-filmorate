@@ -30,8 +30,8 @@ class FilmCRUDMemoryTest {
 
     @Test
     void validateName() throws ValidationException {
-        Film film = new Film(1, "", "Test", LocalDate.of(2000, 1, 1),
-                Duration.ofHours(1));
+        Film film = new Film("", "Test", LocalDate.of(2000, 1, 1),
+                Duration.ofHours(1), 1);
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setName("    ");
@@ -43,8 +43,8 @@ class FilmCRUDMemoryTest {
 
     @Test
     void validateDescription() throws ValidationException {
-        Film film = new Film(1, "Test", "", LocalDate.of(2000, 1, 1),
-                Duration.ofHours(1));
+        Film film = new Film( "Test", "", LocalDate.of(2000, 1, 1),
+                Duration.ofHours(1), 1);
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDescription("   ");
@@ -62,8 +62,8 @@ class FilmCRUDMemoryTest {
 
     @Test
     void validateDate() throws ValidationException {
-        Film film = new Film(1, "Test", "test", LocalDate.of(1895, 12, 27),
-                Duration.ofHours(1));
+        Film film = new Film("Test", "test", LocalDate.of(1895, 12, 27),
+                Duration.ofHours(1), 1);
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setReleaseDate(LocalDate.of(1895, 12, 28));
@@ -72,8 +72,8 @@ class FilmCRUDMemoryTest {
 
     @Test
     void validateDuration() throws ValidationException {
-        Film film = new Film(1, "Test", "test", LocalDate.of(1995, 12, 27),
-                Duration.ofHours(-1));
+        Film film = new Film( "Test", "test", LocalDate.of(1995, 12, 27),
+                Duration.ofHours(-1), 1);
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDuration(Duration.ofHours(0));

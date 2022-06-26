@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,7 +14,9 @@ public class User {
     private String name;
     private LocalDate birthday;
 
-    public User(int id, String email, String login, String name, LocalDate birthday) {
+    @JsonCreator
+    public User(@JsonProperty("id") int id, @JsonProperty("email") String email, @JsonProperty("login") String login,
+                @JsonProperty("name") String name, @JsonProperty("birthday") LocalDate birthday) {
         this.id = id;
         this.email = email;
         this.login = login;
@@ -20,7 +24,9 @@ public class User {
         this.birthday = birthday;
     }
 
-    public User(String email, String login, String name, LocalDate birthday) {
+    @JsonCreator
+    public User(@JsonProperty("email") String email, @JsonProperty("login") String login,
+                @JsonProperty("name") String name, @JsonProperty("birthday") LocalDate birthday) {
         this.id = null;
         this.email = email;
         this.login = login;

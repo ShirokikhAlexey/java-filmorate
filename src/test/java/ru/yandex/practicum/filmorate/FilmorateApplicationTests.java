@@ -73,7 +73,7 @@ class FilmoRateApplicationTests {
 	@Test
 	public void testCreateFilm()  throws ValidationException {
 		Assertions.assertFalse(filmStorage.contains(1));
-		Film testFilm = new Film("Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1));
+		Film testFilm = new Film("Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1);
 		filmStorage.create(testFilm);
 		Assertions.assertTrue(filmStorage.contains(1));
 	}
@@ -81,7 +81,7 @@ class FilmoRateApplicationTests {
 	@Test
 	public void testFindFilmById() throws NotFoundException {
 		Film film = filmStorage.read(1);
-		Assertions.assertEquals(film, new Film(1, "Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1)));
+		Assertions.assertEquals(film, new Film("Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1));
 	}
 
 	@Test
@@ -97,7 +97,7 @@ class FilmoRateApplicationTests {
 
 	@Test
 	public void testGetAllFilms() throws NotFoundException, ValidationException {
-		Film secondFilm =  new Film("TestNew", "TestNew", LocalDate.of(2000, 1, 1), Duration.ofHours(1));
+		Film secondFilm =  new Film("TestNew", "TestNew", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1);
 		filmStorage.create(secondFilm);
 
 		List<Film> inDbFilms = filmStorage.readAll();
