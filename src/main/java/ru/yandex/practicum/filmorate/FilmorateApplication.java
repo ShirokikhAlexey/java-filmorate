@@ -10,7 +10,7 @@ public class FilmorateApplication {
     public static StorageManager db;
 
     public static void main(String[] args) {
-        db = DBManager.getMemoryManager();
+        db = DBManager.getDbManager();
         SpringApplication.run(FilmorateApplication.class, args);
     }
 

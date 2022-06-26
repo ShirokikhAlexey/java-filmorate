@@ -13,7 +13,11 @@ public class DBManager {
         DBManager.jdbcTemplate = jdbcTemplate;
     }
 
-    public static StorageManagerDb getMemoryManager() {
+    public static StorageManagerMemory getMemoryManager() {
+        return new StorageManagerMemory();
+    }
+
+    public static StorageManagerDb getDbManager() {
         return new StorageManagerDb(jdbcTemplate);
     }
 }
