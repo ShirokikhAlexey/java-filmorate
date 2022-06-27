@@ -1,6 +1,9 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.UserFilmLikesStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -15,9 +18,11 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
+@Repository
 public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLikes, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public UserFilmLikesDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

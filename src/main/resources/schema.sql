@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "films" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "name" varchar NOT NULL,
   "description" varchar NOT NULL,
   "releaseDate" timestamp NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "films" (
 );
 
 CREATE TABLE IF NOT EXISTS "users" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int auto_increment primary key,
   "name" varchar NOT NULL,
   "email" varchar NOT NULL,
   "login" varchar NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 
 CREATE TABLE IF NOT EXISTS "genres" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "name" varchar NOT NULL,
   "description" varchar,
   "created_at" timestamp NOT NULL DEFAULT (current_timestamp),
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "genres" (
 );
 
 CREATE TABLE IF NOT EXISTS "ratings" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "name" varchar NOT NULL,
   "description" varchar,
   "created_at" timestamp NOT NULL DEFAULT (current_timestamp),
@@ -36,21 +36,21 @@ CREATE TABLE IF NOT EXISTS "ratings" (
 );
 
 CREATE TABLE IF NOT EXISTS "film_genre" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "film_id" int NOT NULL,
   "genre_id" int NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (current_timestamp)
 );
 
 CREATE TABLE IF NOT EXISTS "user_film_likes" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "film_id" int NOT NULL,
   "user_id" int NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (current_timestamp)
 );
 
 CREATE TABLE IF NOT EXISTS "friends" (
-  "id" SERIAL PRIMARY KEY,
+  "id" int PRIMARY KEY AUTO_INCREMENT,
   "user_id" int NOT NULL,
   "friend_id" int NOT NULL,
   "confirmed" boolean DEFAULT false,

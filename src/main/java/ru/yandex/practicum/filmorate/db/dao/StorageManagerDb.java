@@ -1,12 +1,16 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.*;
 import ru.yandex.practicum.filmorate.model.*;
 
+@Repository
 public class StorageManagerDb implements StorageManager {
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public StorageManagerDb(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

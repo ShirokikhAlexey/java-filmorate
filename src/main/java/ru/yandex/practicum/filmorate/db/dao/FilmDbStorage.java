@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -14,10 +16,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+@Repository
 public class FilmDbStorage implements FilmStorage<Film, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -27,34 +30,34 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
                 "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
                 "r.description as 'ratingDescription' " +
-                "FROM films f JOIN ratings r ON r.id = f.rating WHERE f.id = ?";
+                "FROM 'films' f JOIN 'ratings' r ON r.id = f.rating WHERE f.id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
     }
 
     @Override
     public void create(Film object) throws ValidationException {
-        String sql = "INSERT INTO films (name, description, releaseDate, duration, rating) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO 'films' (name, description, releaseDate, duration, rating) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, object.getName(), object.getDescription(), object.getReleaseDate(),
                 object.getDuration(), object.getRatingID());
     }
 
     @Override
     public void update(Film updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE films SET name=?, description=?, releaseDate=?, duration=? WHERE id=?";
+        String sql = "UPDATE 'films' SET name=?, description=?, releaseDate=?, duration=? WHERE id=?";
         jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(),
                 updatedObject.getReleaseDate(), updatedObject.getDuration(), updatedObject.getId());
     }
 
     @Override
     public void delete(Integer id) throws NotFoundException {
-        String sql = "DELETE FROM films WHERE id=?";
+        String sql = "DELETE FROM 'films' WHERE id=?";
         jdbcTemplate.update(sql, id);
     }
 
     @Override
     public boolean contains(Integer id) {
-        String sql = "SELECT COUNT(*) FROM films WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM 'films' WHERE id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count != 0;
     }
@@ -64,7 +67,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
                 "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
                 "r.description as 'ratingDescription' " +
-                "FROM films f JOIN ratings r ON r.id = f.rating";
+                "FROM 'films' f JOIN 'ratings' r ON r.id = f.rating";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }

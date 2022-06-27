@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
+import ru.yandex.practicum.filmorate.db.dao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -13,7 +14,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
 
-import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
 @Slf4j
 @RestController
@@ -22,14 +22,16 @@ public class FilmController {
     private final FilmService filmService;
 
     @Autowired
+    private FilmDbStorage filmCRUD;
+
+    @Autowired
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
     @PostMapping
     public Film create(@RequestBody Film film) throws ValidationException {
-        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
-        connection.create(film);
+        filmCRUD.create(film);
 
         log.info("Добавлен фильм {}", film.toString());
         return film;
@@ -37,13 +39,12 @@ public class FilmController {
 
     @PutMapping
     public Film update(@RequestBody Film film) throws ValidationException {
-        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
         try {
-            if (film.getId() != 0 && connection.contains(film.getId())) {
-                connection.update(film);
+            if (film.getId() != 0 && filmCRUD.contains(film.getId())) {
+                filmCRUD.update(film);
                 log.info("Изменен фильм {}", film.toString());
             } else if (film.getId() == 0) {
-                connection.create(film);
+                filmCRUD.create(film);
                 log.info("Добавлен фильм {}", film.toString());
             } else {
                 throw new NotFoundException();
@@ -58,15 +59,13 @@ public class FilmController {
 
     @GetMapping
     public List<Film> findAll() {
-        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
-        return connection.readAll();
+        return filmCRUD.readAll();
     }
 
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable int id) {
         try {
-            FilmStorage<Film, Integer> connection = db.getFilmCRUD();
-            return connection.read(id);
+            return filmCRUD.read(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -92,7 +91,6 @@ public class FilmController {
 
     @GetMapping("/popular")
     public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
-        FilmStorage<Film, Integer> connection = db.getFilmCRUD();
         return filmService.getPopular(count);
     }
 }

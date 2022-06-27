@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
+import ru.yandex.practicum.filmorate.db.dao.RatingDbStorage;
+import ru.yandex.practicum.filmorate.db.dao.UserDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -13,7 +15,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.List;
 
-import static ru.yandex.practicum.filmorate.FilmorateApplication.db;
 
 @Slf4j
 @RestController
@@ -25,25 +26,24 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    @Autowired
+    private UserDbStorage userCRUD;
 
     @PostMapping
     public User create(@RequestBody User user) throws ValidationException {
-        UserStorage<User, Integer> connection = db.getUserCRUD();
-
-        connection.create(user);
+        userCRUD.create(user);
         log.info("Добавлен пользователь {}", user.toString());
         return user;
     }
 
     @PutMapping
     public User update(@RequestBody User user) throws ValidationException {
-        UserStorage<User, Integer> connection = db.getUserCRUD();
         try {
-            if (user.getId() != 0 && connection.contains(user.getId())) {
-                connection.update(user);
+            if (user.getId() != 0 && userCRUD.contains(user.getId())) {
+                userCRUD.update(user);
                 log.info("Изменен пользователь {}", user.toString());
             } else if (user.getId() == 0) {
-                connection.create(user);
+                userCRUD.create(user);
                 log.info("Добавлен пользователь {}", user.toString());
             } else {
                 throw new NotFoundException();
@@ -58,15 +58,13 @@ public class UserController {
 
     @GetMapping
     public List<User> findAll() {
-        UserStorage<User, Integer> connection = db.getUserCRUD();
-        return connection.readAll();
+        return userCRUD.readAll();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable int id) {
         try {
-            UserStorage<User, Integer> connection = db.getUserCRUD();
-            return connection.read(id);
+            return userCRUD.read(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

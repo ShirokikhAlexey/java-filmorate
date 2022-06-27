@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.db.base.FriendsStorage;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
+import ru.yandex.practicum.filmorate.db.dao.FilmDbStorage;
+import ru.yandex.practicum.filmorate.db.dao.FriendsDbStorage;
+import ru.yandex.practicum.filmorate.db.dao.UserDbStorage;
 import ru.yandex.practicum.filmorate.db.memory.StorageManagerMemory;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -15,14 +18,11 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final UserStorage<User, Integer> dbUserSession;
-    private final FriendsStorage<Friends, Integer> dbFriendsSession;
+    @Autowired
+    private UserDbStorage dbUserSession;
 
     @Autowired
-    public UserService(StorageManagerMemory dbManager) {
-        this.dbUserSession = dbManager.getUserCRUD();
-        this.dbFriendsSession = dbManager.getFriendsCRUD();
-    }
+    private FriendsDbStorage dbFriendsSession;
 
     public User sendFriendRequest(int from, int to) throws ValidationException, NotFoundException {
         User userFrom = dbUserSession.read(from);

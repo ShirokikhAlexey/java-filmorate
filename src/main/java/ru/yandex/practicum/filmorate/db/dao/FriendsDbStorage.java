@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.FriendsStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -12,9 +14,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public FriendsDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
