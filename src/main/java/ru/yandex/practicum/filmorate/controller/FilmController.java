@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,7 +51,7 @@ public class FilmController {
                 throw new NotFoundException();
             }
             return film;
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | EmptyResultDataAccessException e) {
             log.info("Попытка обновления несуществующей записи: {}", film.toString());
 
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -66,7 +67,7 @@ public class FilmController {
     public Film getFilm(@PathVariable int id) {
         try {
             return filmCRUD.read(id);
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
@@ -75,7 +76,7 @@ public class FilmController {
     public Film addLike(@PathVariable int id, @PathVariable int userId) throws ValidationException {
         try {
             return filmService.likeMovie(id, userId);
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
@@ -84,7 +85,7 @@ public class FilmController {
     public Film deleteLike(@PathVariable int id, @PathVariable int userId) throws ValidationException {
         try {
             return filmService.deleteLike(id, userId);
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }

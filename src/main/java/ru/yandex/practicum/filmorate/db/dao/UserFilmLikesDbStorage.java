@@ -147,14 +147,14 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
     }
 
     public List<Film> getPopularFilms(int count) {
-        String sql = "SELECT \"f.id\" as \"id\", \"f.name\" as \"name\", \"f.description\" as \"description\", " +
-                "\"f.releaseDate\" as \"releaseDate\", \"f.duration\" as \"duration\", \"r.id\" as \"ratingID\", " +
-                "\"r.name\" as \"ratingName\", \"r.description\" as \"ratingDescription\", " +
-                "COUNT(\"ufl.like_id\") as \"counter\" " +
-                "FROM \"user_film_likes\" \"ufl\" " +
-                "JOIN \"films\" \"f\" ON \"f.id\" = \"ufl.film_id\" " +
-                "JOIN \"ratings\" \"r\" ON \"r.id\" = \"f.rating\" " +
-                "GROUP BY \"ufl.film_id\"" +
+        String sql = "SELECT \"f\".\"id\" as \"id\", \"f\".\"name\" as \"name\", \"f\".\"description\" as \"description\", " +
+                "\"f\".\"releaseDate\" as \"releaseDate\", \"f\".\"duration\" as \"duration\", \"r\".\"id\" as \"ratingID\", " +
+                "\"r\".\"name\" as \"ratingName\", \"r\".\"description\" as \"ratingDescription\", " +
+                "COUNT(\"ufl\".\"like_id\") as \"counter\" " +
+                "FROM \"user_film_likes\" as \"ufl\" " +
+                "JOIN \"films\" as \"f\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
+                "JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"rating\" " +
+                "GROUP BY \"ufl\".\"film_id\"" +
                 "ORDER BY \"counter\" desc " +
                 "LIMIT ?";
 

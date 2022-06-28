@@ -31,10 +31,10 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
 
     @Override
     public Film read(Integer id) throws NotFoundException {
-        String sql = "SELECT \"f.id\" as \"id\", \"f.name\" as \"name\", \"f.description\" as \"description\", " +
-                "\"f.releaseDate\" as \"releaseDate\", \"f.duration\" as \"duration\", \"r.id\" as \"ratingID\", " +
-                "\"r.name\" as \"ratingName\", \"r.description\" as \"ratingDescription\" " +
-                "FROM \"films\" \"f\" JOIN \"ratings\" \"r\" ON \"r.id\" = \"f.rating\" WHERE \"f.id\" = ?";
+        String sql = "SELECT \"f\".\"id\" as \"id\", \"f\".\"name\" as \"name\", \"f\".\"description\" as \"description\", " +
+                "\"f\".\"releaseDate\" as \"releaseDate\", \"f\".\"duration\" as \"duration\", \"r\".\"id\" as \"ratingID\", " +
+                "\"r\".\"name\" as \"ratingName\", \"r\".\"description\" as \"ratingDescription\" " +
+                "FROM \"films\" as \"f\" JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"rating\" WHERE \"f\".\"id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
     }
@@ -96,10 +96,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
 
     @Override
     public List<Film> readAll() {
-        String sql = "SELECT \"f.id\" as \"id\", \"f.name\" as \"name\", \"f.description\" as \"description\", " +
-                "\"f.releaseDate\" as \"releaseDate\", \"f.duration\" as \"duration\", \"r.id\" as \"ratingID\", " +
-                "\"r.name\" as \"ratingName\", \"r.description\" as \"ratingDescription\" " +
-                "FROM \"films\" \"f\" JOIN \"ratings\" \"r\" ON \"r.id\" = \"f.rating\"";
+        String sql = "SELECT \"f\".\"id\" as \"id\", \"f\".\"name\" as \"name\", " +
+                "\"f\".\"description\" as \"description\", " +
+                "\"f\".\"releaseDate\" as \"releaseDate\", \"f\".\"duration\" as \"duration\", " +
+                "\"r\".\"id\" as \"ratingID\", " +
+                "\"r\".\"name\" as \"ratingName\", \"r\".\"description\" as \"ratingDescription\" " +
+                "FROM \"films\" as \"f\" JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"rating\"";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }

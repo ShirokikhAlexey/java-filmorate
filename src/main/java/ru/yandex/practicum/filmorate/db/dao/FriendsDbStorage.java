@@ -130,11 +130,11 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
 
     @Override
     public List<User> getUserFriends(Integer userId) {
-        String sql = "SELECT \"u.id\" as \"id\", \"u.name\" as \"name\", \"u.email\" as \"email\", " +
-                "\"u.login\" as \"login\", \"u.birthday\" as \"birthday\"" +
-                " FROM \"friends\" \"f\"" +
-                "JOIN \"users\" \"u\" ON \"u.id\" = \"f.friend_id\" " +
-                "WHERE \"u.user_id\" = ? ";
+        String sql = "SELECT \"users\".\"id\" as \"id\", \"users\".\"name\" as \"name\", \"users\".\"email\" as \"email\", " +
+                "\"users\".\"login\" as \"login\", \"users\".\"birthday\" as \"birthday\" " +
+                "FROM \"friends\" " +
+                "JOIN \"users\" ON \"users\".\"id\" = \"friends\".\"friend_id\" " +
+                "WHERE \"friends\".\"user_id\" = ? ";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), userId);
     }
