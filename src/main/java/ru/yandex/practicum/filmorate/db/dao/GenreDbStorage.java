@@ -24,39 +24,39 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
 
     @Override
     public Genre read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM genres WHERE id = ?";
+        String sql = "SELECT * FROM \"genres\" WHERE \"id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeGenre(rs), id);
     }
 
     @Override
     public void create(Genre object) throws ValidationException {
-        String sql = "INSERT INTO genres (name, description) VALUES (?, ?)";
+        String sql = "INSERT INTO \"genres\" (\"name\", \"description\") VALUES (?, ?)";
         jdbcTemplate.update(sql, object.getName(), object.getDescription());
     }
 
     @Override
     public void update(Genre updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE genres SET name=?, description=?  WHERE id=?";
+        String sql = "UPDATE \"genres\" SET \"name\"=?, \"description\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(), updatedObject.getId());
     }
 
     @Override
     public void delete(Integer id) throws NotFoundException {
-        String sql = "DELETE FROM genres WHERE id=?";
+        String sql = "DELETE FROM \"genres\" WHERE \"id\"=?";
         jdbcTemplate.update(sql, id);
     }
 
     @Override
     public boolean contains(Integer id) {
-        String sql = "SELECT COUNT(*) FROM genres WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM \"genres\" WHERE \"id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count != 0;
     }
 
     @Override
     public List<Genre> readAll() {
-        String sql = "SELECT * FROM genres";
+        String sql = "SELECT * FROM \"genres\"";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs));
     }

@@ -23,39 +23,39 @@ public class RatingDbStorage implements RatingStorage<Rating, Integer> {
 
     @Override
     public Rating read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM ratings WHERE id = ?";
+        String sql = "SELECT * FROM \"ratings\" WHERE \"id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeRating(rs), id);
     }
 
     @Override
     public void create(Rating object) throws ValidationException {
-        String sql = "INSERT INTO ratings (name, description) VALUES (?, ?)";
+        String sql = "INSERT INTO \"ratings\" (\"name\", \"description\") VALUES (?, ?)";
         jdbcTemplate.update(sql, object.getName(), object.getDescription());
     }
 
     @Override
     public void update(Rating updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE ratings SET name=?, description=?  WHERE id=?";
+        String sql = "UPDATE \"ratings\" SET \"name\"=?, \"description\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(), updatedObject.getId());
     }
 
     @Override
     public void delete(Integer id) throws NotFoundException {
-        String sql = "DELETE FROM ratings WHERE id=?";
+        String sql = "DELETE FROM \"ratings\" WHERE \"id\"=?";
         jdbcTemplate.update(sql, id);
     }
 
     @Override
     public boolean contains(Integer id) {
-        String sql = "SELECT COUNT(*) FROM ratings WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM \"ratings\" WHERE \"id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count != 0;
     }
 
     @Override
     public List<Rating> readAll() {
-        String sql = "SELECT * FROM ratings";
+        String sql = "SELECT * FROM \"ratings\"";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeRating(rs));
     }

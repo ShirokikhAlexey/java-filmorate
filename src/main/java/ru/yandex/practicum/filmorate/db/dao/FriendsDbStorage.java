@@ -25,40 +25,40 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
 
     @Override
     public Friends read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM friends f WHERE f.id = ?";
+        String sql = "SELECT * FROM \"friends\" \"f\" WHERE \"f.id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFriend(rs), id);
     }
 
     @Override
     public void create(Friends object) throws ValidationException {
-        String sql = "INSERT INTO friends (user_id, friend_id, confirmed) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO \"friends\" (\"user_id\", \"friend_id\", \"confirmed\") VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, object.getUserId(), object.getFriendId(), object.isConfirmed());
     }
 
     @Override
     public void update(Friends updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE friends SET user_id=?, friend_id=?, confirmed=?  WHERE id=?";
+        String sql = "UPDATE \"friends\" SET \"user_id\"=?, \"friend_id\"=?, \"confirmed\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(sql, updatedObject.getUserId(), updatedObject.getFriendId(),
                 updatedObject.isConfirmed(), updatedObject.getId());
     }
 
     @Override
     public void delete(Integer id) throws NotFoundException {
-        String sql = "DELETE FROM friends WHERE id=?";
+        String sql = "DELETE FROM \"friends\" WHERE \"id\"=?";
         jdbcTemplate.update(sql, id);
     }
 
     @Override
     public boolean contains(Integer id) {
-        String sql = "SELECT COUNT(*) FROM friends WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM \"friends\" WHERE \"id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count != 0;
     }
 
     @Override
     public List<Friends> readAll() {
-        String sql = "SELECT * FROM friends";
+        String sql = "SELECT * FROM \"friends\"";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFriend(rs));
     }
@@ -74,7 +74,7 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
 
     @Override
     public Integer getUserFriend(Integer userId, Integer friendId) {
-        String sql = "SELECT id FROM friends WHERE user_id = ? AND friend_id=?";
+        String sql = "SELECT \"id\" FROM \"friends\" WHERE \"user_id\" = ? AND \"friend_id\"=?";
         return jdbcTemplate.queryForObject(sql, Integer.class, userId, friendId);
     }
 
@@ -106,11 +106,11 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
 
     @Override
     public List<User> getUserFriends(Integer userId) {
-        String sql = "SELECT u.id as 'id', u.name as 'name', u.email as 'email', u.login as 'login', " +
-                "u.birthday as 'birthday'" +
-                " FROM friends f" +
-                "JOIN users u ON u.id = f.friend_id " +
-                "WHERE u.user_id = ? ";
+        String sql = "SELECT \"u.id\" as \"id\", \"u.name\" as \"name\", \"u.email\" as \"email\", " +
+                "\"u.login\" as \"login\", \"u.birthday\" as \"birthday\"" +
+                " FROM \"friends\" \"f\"" +
+                "JOIN \"users\" \"u\" ON \"u.id\" = \"f.friend_id\" " +
+                "WHERE \"u.user_id\" = ? ";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), userId);
     }

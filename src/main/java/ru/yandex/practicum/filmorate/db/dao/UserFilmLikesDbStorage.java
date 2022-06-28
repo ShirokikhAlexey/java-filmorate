@@ -29,39 +29,39 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
 
     @Override
     public UserFilmLikes read(Integer id) throws NotFoundException {
-        String sql = "SELECT * FROM user_film_likes ufl WHERE ufl.id = ?";
+        String sql = "SELECT * FROM \"user_film_likes\" \"ufl\" WHERE \"ufl.id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeUserFilmLikes(rs), id);
     }
 
     @Override
     public void create(UserFilmLikes object) throws ValidationException {
-        String sql = "INSERT INTO user_film_likes (user_id, film_id) VALUES (?, ?)";
+        String sql = "INSERT INTO \"user_film_likes\" (\"user_id\", \"film_id\") VALUES (?, ?)";
         jdbcTemplate.update(sql, object.getUserId(), object.getFilmId());
     }
 
     @Override
     public void update(UserFilmLikes updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE user_film_likes SET user_id=?, film_id=?  WHERE id=?";
+        String sql = "UPDATE \"user_film_likes\" SET \"user_id\"=?, \"film_id\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(sql, updatedObject.getUserId(), updatedObject.getFilmId(), updatedObject.getId());
     }
 
     @Override
     public void delete(Integer id) throws NotFoundException {
-        String sql = "DELETE FROM user_film_likes WHERE id=?";
+        String sql = "DELETE FROM \"user_film_likes\" WHERE \"id\"=?";
         jdbcTemplate.update(sql, id);
     }
 
     @Override
     public boolean contains(Integer id) {
-        String sql = "SELECT COUNT(*) FROM user_film_likes WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM \"user_film_likes\" WHERE \"id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count != 0;
     }
 
     @Override
     public List<UserFilmLikes> readAll() {
-        String sql = "SELECT * FROM user_film_likes";
+        String sql = "SELECT * FROM \"user_film_likes\"";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUserFilmLikes(rs));
     }
@@ -76,21 +76,21 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
 
     @Override
     public HashSet<Integer> getFilmLikes(Integer filmId) {
-        String sql = "SELECT user_id FROM user_film_likes WHERE film_id=?";
+        String sql = "SELECT \"user_id\" FROM \"user_film_likes\" WHERE \"film_id\"=?";
         List<Integer> data = jdbcTemplate.queryForList(sql, Integer.class, filmId);
         return new HashSet<>(data);
     }
 
     @Override
     public HashSet<Integer> getUserLikes(Integer userId) {
-        String sql = "SELECT film_id FROM user_film_likes WHERE user_id=?";
+        String sql = "SELECT \"film_id\" FROM \"user_film_likes\" WHERE \"user_id\"=?";
         List<Integer> data = jdbcTemplate.queryForList(sql, Integer.class, userId);
         return new HashSet<>(data);
     }
 
     @Override
     public Integer getUserLike(Integer userId, Integer filmId) {
-        String sql = "SELECT id FROM user_film_likes WHERE user_id = ? AND film_id=?";
+        String sql = "SELECT \"id\" FROM \"user_film_likes\" WHERE \"user_id\" = ? AND \"film_id\"=?";
         return jdbcTemplate.queryForObject(sql, Integer.class, userId, filmId);
     }
 
@@ -125,14 +125,15 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
     }
 
     public List<Film> getPopularFilms(int count) {
-        String sql = "SELECT f.id as 'id', f.name as 'name', f.description as 'description', " +
-                "f.releaseDate as 'releaseDate', f.duration as 'duration', r.id as 'ratingID', r.name as 'ratingName'," +
-                "r.description as 'ratingDescription', COUNT(ufl.like_id) as counter " +
-                "FROM user_film_likes ufl " +
-                "JOIN films f ON f.id = ufl.film_id " +
-                "JOIN ratings r ON r.id = f.rating " +
-                "GROUP BY ufl.film_id" +
-                "ORDER BY counter desc " +
+        String sql = "SELECT \"f.id\" as \"id\", \"f.name\" as \"name\", \"f.description\" as \"description\", " +
+                "\"f.releaseDate\" as \"releaseDate\", \"f.duration\" as \"duration\", \"r.id\" as \"ratingID\", " +
+                "\"r.name\" as \"ratingName\", \"r.description\" as \"ratingDescription\", " +
+                "COUNT(\"ufl.like_id\") as \"counter\" " +
+                "FROM \"user_film_likes\" \"ufl\" " +
+                "JOIN \"films\" \"f\" ON \"f.id\" = \"ufl.film_id\" " +
+                "JOIN \"ratings\" \"r\" ON \"r.id\" = \"f.rating\" " +
+                "GROUP BY \"ufl.film_id\"" +
+                "ORDER BY \"counter\" desc " +
                 "LIMIT ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), count);
