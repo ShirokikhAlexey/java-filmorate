@@ -2,12 +2,15 @@ package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.RatingStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Rating;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,15 +32,34 @@ public class RatingDbStorage implements RatingStorage<Rating, Integer> {
     }
 
     @Override
-    public void create(Rating object) throws ValidationException {
+    public Rating create(Rating object) throws ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO \"ratings\" (\"name\", \"description\") VALUES (?, ?)";
-        jdbcTemplate.update(sql, object.getName(), object.getDescription());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, object.getName());
+            ps.setString(2, object.getDescription());
+            return ps;
+        }, keyHolder);
+        object.setId(keyHolder.getKey().intValue());
+        return object;
     }
 
     @Override
-    public void update(Rating updatedObject) throws NotFoundException, ValidationException {
+    public Rating update(Rating updatedObject) throws NotFoundException, ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "UPDATE \"ratings\" SET \"name\"=?, \"description\"=?  WHERE \"id\"=?";
-        jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(), updatedObject.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, updatedObject.getName());
+            ps.setString(2, updatedObject.getDescription());
+            ps.setInt(3, updatedObject.getId());
+            return ps;
+        }, keyHolder);
+        updatedObject.setId(keyHolder.getKey().intValue());
+        return updatedObject;
     }
 
     @Override

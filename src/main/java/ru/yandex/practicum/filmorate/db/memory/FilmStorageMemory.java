@@ -30,7 +30,7 @@ public class FilmStorageMemory implements FilmStorage<Film, Integer> {
     }
 
     @Override
-    public void create(Film object) throws ValidationException {
+    public Film create(Film object) throws ValidationException {
         this.validate(object);
         if (object.getId() == 0) {
             autoincrement += 1;
@@ -42,16 +42,18 @@ public class FilmStorageMemory implements FilmStorage<Film, Integer> {
             }
             db.put(object.getId(), object);
         }
+        return object;
     }
 
     @Override
-    public void update(Film updatedObject) throws NotFoundException, ValidationException {
+    public Film update(Film updatedObject) throws NotFoundException, ValidationException {
         this.validate(updatedObject);
         if (db.containsKey(updatedObject.getId())) {
             db.put(updatedObject.getId(), updatedObject);
         } else {
             throw new NotFoundException();
         }
+        return updatedObject;
     }
 
     @Override

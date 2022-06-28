@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
@@ -10,6 +12,8 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Rating;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -36,19 +40,45 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
     }
 
     @Override
-    public void create(Film object) throws ValidationException {
+    public Film create(Film object) throws ValidationException {
+        this.validate(object);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO \"films\" (\"name\", \"description\", \"releaseDate\", \"duration\", \"rating\") " +
                 "VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, object.getName(), object.getDescription(), object.getReleaseDate(),
-                object.getDuration(), object.getRatingID());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, object.getName());
+            ps.setString(2, object.getDescription());
+            ps.setDate(3, Date.valueOf(object.getReleaseDate()));
+            ps.setFloat(4, object.getDuration());
+            ps.setInt(5, object.getRatingID());
+            return ps;
+        }, keyHolder);
+        object.setId(keyHolder.getKey().intValue());
+        return object;
     }
 
     @Override
-    public void update(Film updatedObject) throws NotFoundException, ValidationException {
-        String sql = "UPDATE \"films\" SET \"name\"=?, \"description\"=?, \"releaseDate\"=?, \"duration\"=? " +
+    public Film update(Film updatedObject) throws NotFoundException, ValidationException {
+        this.validate(updatedObject);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = "UPDATE \"films\" SET \"name\"=?, \"description\"=?, \"releaseDate\"=?, \"duration\"=? ," +
+                "\"rating\" = ?" +
                 "WHERE \"id\"=?";
-        jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getDescription(),
-                updatedObject.getReleaseDate(), updatedObject.getDuration(), updatedObject.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, updatedObject.getName());
+            ps.setString(2, updatedObject.getDescription());
+            ps.setDate(3, Date.valueOf(updatedObject.getReleaseDate()));
+            ps.setFloat(4, updatedObject.getDuration());
+            ps.setInt(5, updatedObject.getRatingID());
+            ps.setInt(6, updatedObject.getId());
+            return ps;
+        }, keyHolder);
+        updatedObject.setId(keyHolder.getKey().intValue());
+        return updatedObject;
     }
 
     @Override

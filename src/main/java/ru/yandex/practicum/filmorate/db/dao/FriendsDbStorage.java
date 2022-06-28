@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.FriendsStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -9,6 +11,8 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Friends;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -31,16 +35,36 @@ public class FriendsDbStorage implements FriendsStorage<Friends, Integer> {
     }
 
     @Override
-    public void create(Friends object) throws ValidationException {
+    public Friends create(Friends object) throws ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO \"friends\" (\"user_id\", \"friend_id\", \"confirmed\") VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, object.getUserId(), object.getFriendId(), object.isConfirmed());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setInt(1, object.getUserId());
+            ps.setInt(2, object.getFriendId());
+            ps.setBoolean(3, object.isConfirmed());
+            return ps;
+        }, keyHolder);
+        object.setId(keyHolder.getKey().intValue());
+        return object;
     }
 
     @Override
-    public void update(Friends updatedObject) throws NotFoundException, ValidationException {
+    public Friends update(Friends updatedObject) throws NotFoundException, ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "UPDATE \"friends\" SET \"user_id\"=?, \"friend_id\"=?, \"confirmed\"=?  WHERE \"id\"=?";
-        jdbcTemplate.update(sql, updatedObject.getUserId(), updatedObject.getFriendId(),
-                updatedObject.isConfirmed(), updatedObject.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setInt(1, updatedObject.getUserId());
+            ps.setInt(2, updatedObject.getFriendId());
+            ps.setBoolean(3, updatedObject.isConfirmed());
+            ps.setInt(4, updatedObject.getId());
+            return ps;
+        }, keyHolder);
+        updatedObject.setId(keyHolder.getKey().intValue());
+        return updatedObject;
     }
 
     @Override

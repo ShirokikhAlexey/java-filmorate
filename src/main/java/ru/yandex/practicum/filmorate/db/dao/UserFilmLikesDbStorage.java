@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.UserFilmLikesStorage;
@@ -11,6 +13,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.UserFilmLikes;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -35,15 +38,34 @@ public class UserFilmLikesDbStorage implements UserFilmLikesStorage<UserFilmLike
     }
 
     @Override
-    public void create(UserFilmLikes object) throws ValidationException {
+    public UserFilmLikes create(UserFilmLikes object) throws ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO \"user_film_likes\" (\"user_id\", \"film_id\") VALUES (?, ?)";
-        jdbcTemplate.update(sql, object.getUserId(), object.getFilmId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setInt(1, object.getUserId());
+            ps.setInt(2, object.getFilmId());
+            return ps;
+        }, keyHolder);
+        object.setId(keyHolder.getKey().intValue());
+        return object;
     }
 
     @Override
-    public void update(UserFilmLikes updatedObject) throws NotFoundException, ValidationException {
+    public UserFilmLikes update(UserFilmLikes updatedObject) throws NotFoundException, ValidationException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "UPDATE \"user_film_likes\" SET \"user_id\"=?, \"film_id\"=?  WHERE \"id\"=?";
-        jdbcTemplate.update(sql, updatedObject.getUserId(), updatedObject.getFilmId(), updatedObject.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setInt(1, updatedObject.getUserId());
+            ps.setInt(2, updatedObject.getFilmId());
+            ps.setInt(3, updatedObject.getId());
+            return ps;
+        }, keyHolder);
+        updatedObject.setId(keyHolder.getKey().intValue());
+        return updatedObject;
     }
 
     @Override

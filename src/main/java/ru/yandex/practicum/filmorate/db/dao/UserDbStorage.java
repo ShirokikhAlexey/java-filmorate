@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.db.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.UserStorage;
@@ -9,8 +11,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,17 +32,40 @@ public class UserDbStorage implements UserStorage<User, Integer> {
     }
 
     @Override
-    public void create(User object) throws ValidationException {
-
+    public User create(User object) throws ValidationException {
+        this.validate(object);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO \"users\"(\"name\", \"email\", \"login\", \"birthday\") VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(sql, object.getName(), object.getEmail(), object.getLogin(), object.getBirthday());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, object.getName());
+            ps.setString(2, object.getEmail());
+            ps.setString(3, object.getLogin());
+            ps.setDate(4, Date.valueOf(object.getBirthday()));
+            return ps;
+        }, keyHolder);
+        object.setId(keyHolder.getKey().intValue());
+        return object;
     }
 
     @Override
-    public void update(User updatedObject) throws NotFoundException, ValidationException {
+    public User update(User updatedObject) throws NotFoundException, ValidationException {
+        this.validate(updatedObject);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "UPDATE \"users\" SET \"name\"=?, \"email\"=?, \"login\"=?, \"birthday\"=? WHERE \"id\"=?";
-        jdbcTemplate.update(sql, updatedObject.getName(), updatedObject.getEmail(),
-                updatedObject.getLogin(), updatedObject.getBirthday(), updatedObject.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, updatedObject.getName());
+            ps.setString(2, updatedObject.getEmail());
+            ps.setString(3, updatedObject.getLogin());
+            ps.setDate(4, Date.valueOf(updatedObject.getBirthday()));
+            ps.setInt(5, updatedObject.getId());
+            return ps;
+        }, keyHolder);
+        updatedObject.setId(keyHolder.getKey().intValue());
+        return updatedObject;
     }
 
     @Override
