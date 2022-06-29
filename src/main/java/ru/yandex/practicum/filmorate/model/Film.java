@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.Duration;
@@ -12,27 +14,31 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Duration duration;
-    private Integer ratingID;
-    private Rating rating;
+    private Integer rate;
+    private Rating mpa;
 
-    public Film(String name, String description, LocalDate releaseDate, Duration duration, Integer ratingID) {
+    @JsonCreator
+    public Film(@JsonProperty("name") String name, @JsonProperty("description") String description,
+                @JsonProperty("releaseDate") LocalDate releaseDate, @JsonProperty("duration") Integer duration,
+                @JsonProperty("rate") Integer rate, @JsonProperty("mpa") Rating mpa) {
         this.id = null;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.ratingID = ratingID;
+        this.duration = Duration.ofMinutes(duration);
+        this.rate = rate;
+        this.mpa = mpa;
     }
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Duration duration,
-                Integer ratingID, Rating rating) {
+    public Film(Integer id, String name, String description, LocalDate releaseDate, Duration duration, Integer rate,
+                Rating mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.ratingID = ratingID;
-        this.rating = rating;
+        this.rate = rate;
+        this.mpa = mpa;
     }
 
     public Long getDuration() {

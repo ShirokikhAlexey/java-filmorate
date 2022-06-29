@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
@@ -30,7 +31,7 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@RequestBody Film film) throws ValidationException {
         filmCRUD.create(film);
 
@@ -38,7 +39,7 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film update(@RequestBody Film film) throws ValidationException {
         try {
             if (film.getId() != 0 && filmCRUD.contains(film.getId())) {

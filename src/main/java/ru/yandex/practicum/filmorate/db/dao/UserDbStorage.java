@@ -35,7 +35,7 @@ public class UserDbStorage implements UserStorage<User, Integer> {
     public User create(User object) throws ValidationException {
         this.validate(object);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO \"users\"(\"name\", \"email\", \"login\", \"birthday\") VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO \"users\" (\"name\", \"email\", \"login\", \"birthday\") VALUES(?, ?, ?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement(sql, new String[] {"id"});
@@ -96,5 +96,25 @@ public class UserDbStorage implements UserStorage<User, Integer> {
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
         return new User(id, email, login, name, birthday);
+    }
+
+    public void addFriend(Integer userId, Integer friendId) throws ValidationException {
+        String sql = "INSERT INTO \"friends\" (\"user_id\", \"friend_id\", \"confirmed\") VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, userId, friendId, false);
+    }
+
+    public void deleteFriend(Integer userId, Integer friendId) throws ValidationException {
+        String sql = "DELETE FROM \"friends\" WHERE \"user_id\" = ? AND \"friend_id\" = ?";
+        jdbcTemplate.update(sql, userId, friendId);
+    }
+
+    public List<User> getUserFriends(Integer userId) throws NotFoundException {
+        String sql = "SELECT \"u\".\"id\" as \"id\", \"u\".\"name\" as \"name\", \"u\".\"email\" as \"email\", " +
+                "\"u\".\"login\" as \"login\", \"u\".\"birthday\" as \"birthday\" " +
+                "FROM \"friends\" \"f\" " +
+                "JOIN \"users\" \"u\" on \"u\".\"id\" = \"f\".\"friend_id\" " +
+                "WHERE \"f\".\"user_id\" = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), userId);
     }
 }

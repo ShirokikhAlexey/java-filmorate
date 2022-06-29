@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.db.memory.FilmStorageMemory;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ class FilmCRUDMemoryTest {
     @Test
     void validateName() throws ValidationException {
         Film film = new Film("", "Test", LocalDate.of(2000, 1, 1),
-                Duration.ofHours(1), 1);
+                1, 1, new Rating(1, "test", "test"));
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setName("    ");
@@ -44,7 +45,7 @@ class FilmCRUDMemoryTest {
     @Test
     void validateDescription() throws ValidationException {
         Film film = new Film( "Test", "", LocalDate.of(2000, 1, 1),
-                Duration.ofHours(1), 1);
+                1, 1, new Rating(1, "test", "test"));
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDescription("   ");
@@ -63,7 +64,7 @@ class FilmCRUDMemoryTest {
     @Test
     void validateDate() throws ValidationException {
         Film film = new Film("Test", "test", LocalDate.of(1895, 12, 27),
-                Duration.ofHours(1), 1);
+                1, 1, new Rating(1, "test", "test"));
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setReleaseDate(LocalDate.of(1895, 12, 28));
@@ -73,7 +74,7 @@ class FilmCRUDMemoryTest {
     @Test
     void validateDuration() throws ValidationException {
         Film film = new Film( "Test", "test", LocalDate.of(1995, 12, 27),
-                Duration.ofHours(-1), 1);
+                -1,1, new Rating(1, "test", "test"));
         assertThrows(ValidationException.class, () -> db.validate(film));
 
         film.setDuration(Duration.ofHours(0));

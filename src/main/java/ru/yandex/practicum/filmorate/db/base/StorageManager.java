@@ -8,10 +8,6 @@ public interface StorageManager {
 
     UserStorage<User, Integer> getUserCRUD();
 
-    UserFilmLikesStorage<UserFilmLikes, Integer> getUserFilmLikesCRUD();
-
-    FriendsStorage<Friends, Integer> getFriendsCRUD();
-
     GenreStorage<Genre, Integer> getGenreCRUD();
 
     RatingStorage<Rating, Integer> getRatingCRUD();

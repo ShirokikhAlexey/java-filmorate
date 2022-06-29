@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS "films" (
   "description" varchar NOT NULL,
   "releaseDate" timestamp NOT NULL,
   "duration" float8 NOT NULL,
-  "rating" int NOT NULL,
+  "rate" int not null,
+  "mpa_id" int NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (current_timestamp),
   "updated_at" timestamp
 );
@@ -58,7 +59,7 @@ CREATE TABLE IF NOT EXISTS "friends" (
   "updated_at" timestamp
 );
 
-ALTER TABLE "films" ADD FOREIGN KEY ("rating") REFERENCES "ratings" ("id");
+ALTER TABLE "films" ADD FOREIGN KEY ("mpa_id") REFERENCES "ratings" ("id");
 
 ALTER TABLE "film_genre" ADD FOREIGN KEY ("film_id") REFERENCES "films" ("id");
 
@@ -71,3 +72,6 @@ ALTER TABLE "user_film_likes" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("i
 ALTER TABLE "friends" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "friends" ADD FOREIGN KEY ("friend_id") REFERENCES "users" ("id");
+
+INSERT INTO "ratings" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');

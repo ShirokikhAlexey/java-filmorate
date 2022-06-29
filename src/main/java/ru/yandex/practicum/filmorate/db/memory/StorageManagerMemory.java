@@ -26,16 +26,6 @@ public class StorageManagerMemory implements StorageManager {
     }
 
     @Override
-    public UserFilmLikesStorage<UserFilmLikes, Integer> getUserFilmLikesCRUD() {
-        return null;
-    }
-
-    @Override
-    public FriendsStorage<Friends, Integer> getFriendsCRUD() {
-        return null;
-    }
-
-    @Override
     public GenreStorage<Genre, Integer> getGenreCRUD() {
         return null;
     }

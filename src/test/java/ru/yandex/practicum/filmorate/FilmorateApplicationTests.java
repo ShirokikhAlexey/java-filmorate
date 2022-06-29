@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.db.dao.UserDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.Duration;
@@ -73,7 +74,7 @@ class FilmoRateApplicationTests {
 	@Test
 	public void testCreateFilm()  throws ValidationException {
 		Assertions.assertFalse(filmStorage.contains(1));
-		Film testFilm = new Film("Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1);
+		Film testFilm = new Film("Test", "Test", LocalDate.of(2000, 1, 1), 1, 1, new Rating(1, "test", "test"));
 		filmStorage.create(testFilm);
 		Assertions.assertTrue(filmStorage.contains(1));
 	}
@@ -81,7 +82,7 @@ class FilmoRateApplicationTests {
 	@Test
 	public void testFindFilmById() throws NotFoundException {
 		Film film = filmStorage.read(1);
-		Assertions.assertEquals(film, new Film("Test", "Test", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1));
+		Assertions.assertEquals(film, new Film("Test", "Test", LocalDate.of(2000, 1, 1), 1, 1, new Rating(1, "test", "test")));
 	}
 
 	@Test
@@ -97,7 +98,7 @@ class FilmoRateApplicationTests {
 
 	@Test
 	public void testGetAllFilms() throws NotFoundException, ValidationException {
-		Film secondFilm =  new Film("TestNew", "TestNew", LocalDate.of(2000, 1, 1), Duration.ofHours(1), 1);
+		Film secondFilm =  new Film("TestNew", "TestNew", LocalDate.of(2000, 1, 1), 1, 1, new Rating(1, "test", "test"));
 		filmStorage.create(secondFilm);
 
 		List<Film> inDbFilms = filmStorage.readAll();
