@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.sql.Date;
@@ -31,11 +32,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
 
     @Override
     public Film read(Integer id) throws NotFoundException {
-        String sql = "SELECT \"f\".\"id\" as \"id\", \"f\".\"name\" as \"name\", \"f\".\"description\" as \"description\", " +
-                "\"f\".\"releaseDate\" as \"releaseDate\", \"f\".\"duration\" as \"duration\"," +
-                "\"f\".\"rate\" as \"rate\" , \"r\".\"id\" as \"ratingID\", " +
-                "\"r\".\"name\" as \"ratingName\", \"r\".\"description\" as \"ratingDescription\" " +
-                "FROM \"films\" as \"f\" JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"rating\" WHERE \"f\".\"id\" = ?";
+        String sql = "SELECT \"f\".\"id\" as \"filmID\", \"f\".\"name\" as \"filmName\", " +
+                "\"f\".\"description\" as \"filmDescription\", " +
+                "\"f\".\"releaseDate\" as \"filmReleaseDate\", \"f\".\"duration\" as \"filmDuration\", " +
+                "\"f\".\"rate\" as \"filmRate\" , \"r\".\"id\" as \"filmRatingID\", " +
+                "\"r\".\"name\" as \"filmRatingName\", \"r\".\"description\" as \"filmRatingDescription\" " +
+                "FROM \"films\" as \"f\" JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" WHERE \"f\".\"id\" = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
     }
@@ -136,14 +138,15 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
     }
 
     public List<Film> getPopularFilms(int count) {
-        String sql = "SELECT \"f\".\"id\" as \"id\", \"f\".\"name\" as \"name\", \"f\".\"description\" as \"description\", " +
-                "\"f\".\"releaseDate\" as \"releaseDate\", \"f\".\"duration\" as \"duration\", " +
-                "\"f\".\"rate\" as \"rate\" , \"r\".\"id\" as \"ratingID\", " +
-                "\"r\".\"name\" as \"ratingName\", \"r\".\"description\" as \"ratingDescription\", " +
-                "COUNT(\"ufl\".\"like_id\") as \"counter\" " +
-                "FROM \"user_film_likes\" as \"ufl\" " +
-                "JOIN \"films\" as \"f\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
-                "JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"rating\" " +
+        String sql = "SELECT \"f\".\"id\" as \"filmID\", \"f\".\"name\" as \"filmName\", " +
+                "\"f\".\"description\" as \"filmDescription\", " +
+                "\"f\".\"releaseDate\" as \"filmReleaseDate\", \"f\".\"duration\" as \"filmDuration\", " +
+                "\"f\".\"rate\" as \"filmRate\" , \"r\".\"id\" as \"filmRatingID\", " +
+                "\"r\".\"name\" as \"filmRatingName\", \"r\".\"description\" as \"filmRatingDescription\", " +
+                "COUNT(\"ufl\".\"id\") as \"counter\" " +
+                "FROM \"films\" as \"f\" " +
+                "LEFT JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
+                "LEFT JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
                 "GROUP BY \"ufl\".\"film_id\"" +
                 "ORDER BY \"counter\" desc " +
                 "LIMIT ?";

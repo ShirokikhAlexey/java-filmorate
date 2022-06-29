@@ -10,18 +10,20 @@ public class Genre {
     private String name;
     private String description;
 
-    @JsonCreator
-    public Genre(@JsonProperty("name") String name, @JsonProperty("description") String description) {
+    public Genre(String name, String description) {
         this.id = null;
         this.name = name;
         this.description = description;
     }
 
-    @JsonCreator
-    public Genre(@JsonProperty("id") Integer id, @JsonProperty("name") String name,
-                 @JsonProperty("description") String description) {
+    public Genre(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    @JsonCreator
+    public Genre(@JsonProperty("id") Integer id) {
+        this.id = id;
     }
 }

@@ -83,11 +83,31 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs));
     }
 
+    public List<Genre> getFilmGenres(Integer filmId) {
+        String sql = "SELECT \"g\".\"id\" as \"id\", \"g\".\"name\" as \"name\", " +
+                "\"g\".\"description\" as \"description\" " +
+                "FROM \"films\" as \"f\" " +
+                "LEFT JOIN \"film_genre\" as \"fg\" on \"fg\".\"film_id\" = \"f\".\"id\" " +
+                "LEFT JOIN \"genres\" as \"g\" on \"fg\".\"genre_id\" = \"g\".\"id\" " +
+                "WHERE \"fg\".\"film_id\" = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs), filmId);
+    }
+
     private Genre makeGenre(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
         String name = rs.getString("name");
         String description = rs.getString("description");
 
         return new Genre(id, name, description);
+    }
+
+    public void addFilmGenre(Integer filmId, Integer genreId) {
+        String sql = "SELECT COUNT(*) FROM \"film_genre\" WHERE \"film_id\" = ? AND \"genre_id\" = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, filmId, genreId);
+        if (count == null){
+            String sqlInsert = "INSERT INTO \"film_genre\" (\"film_id\", \"genre_id\") VALUES(?, ?)";
+            jdbcTemplate.update(sqlInsert, filmId, genreId);
+        }
     }
 }

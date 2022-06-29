@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.db.dao.FilmDbStorage;
+import ru.yandex.practicum.filmorate.db.dao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
@@ -27,6 +29,9 @@ public class FilmController {
     private FilmDbStorage filmCRUD;
 
     @Autowired
+    private GenreDbStorage genreCRUD;
+
+    @Autowired
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
@@ -34,7 +39,11 @@ public class FilmController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@RequestBody Film film) throws ValidationException {
         filmCRUD.create(film);
-
+        if (film.getGenres() != null) {
+            for (Genre genre : film.getGenres()) {
+                genreCRUD.addFilmGenre(film.getId(), genre.getId());
+            }
+        }
         log.info("Добавлен фильм {}", film.toString());
         return film;
     }
@@ -67,7 +76,13 @@ public class FilmController {
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable int id) {
         try {
-            return filmCRUD.read(id);
+            Film film = filmCRUD.read(id);
+            List<Genre> genres = genreCRUD.getFilmGenres(id);
+            if (genres.size() == 0){
+                genres = null;
+            }
+            film.setGenres(genres);
+            return film;
         } catch (NotFoundException | EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

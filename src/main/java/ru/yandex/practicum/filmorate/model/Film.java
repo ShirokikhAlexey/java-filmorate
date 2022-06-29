@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Film {
@@ -16,11 +18,13 @@ public class Film {
     private Duration duration;
     private Integer rate;
     private Rating mpa;
+    private List<Genre> genres;
 
     @JsonCreator
     public Film(@JsonProperty("name") String name, @JsonProperty("description") String description,
                 @JsonProperty("releaseDate") LocalDate releaseDate, @JsonProperty("duration") Integer duration,
-                @JsonProperty("rate") Integer rate, @JsonProperty("mpa") Rating mpa) {
+                @JsonProperty("rate") Integer rate, @JsonProperty("mpa") Rating mpa,
+                @JsonProperty("genres") ArrayList<Genre> genres) {
         this.id = null;
         this.name = name;
         this.description = description;
@@ -28,6 +32,7 @@ public class Film {
         this.duration = Duration.ofMinutes(duration);
         this.rate = rate;
         this.mpa = mpa;
+        this.genres = genres;
     }
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Duration duration, Integer rate,

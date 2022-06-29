@@ -73,5 +73,23 @@ ALTER TABLE "friends" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "friends" ADD FOREIGN KEY ("friend_id") REFERENCES "users" ("id");
 
-INSERT INTO "ratings" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
+INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
 INSERT INTO "genres" ("name", "description") VALUES ('TEST', 'TEST');
