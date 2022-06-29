@@ -143,12 +143,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "\"f\".\"releaseDate\" as \"filmReleaseDate\", \"f\".\"duration\" as \"filmDuration\", " +
                 "\"f\".\"rate\" as \"filmRate\" , \"r\".\"id\" as \"filmRatingID\", " +
                 "\"r\".\"name\" as \"filmRatingName\", \"r\".\"description\" as \"filmRatingDescription\", " +
-                "COUNT(\"ufl\".\"id\") as \"counter\" " +
+                "COUNT(\"f\".\"id\") as \"ctr\" " +
                 "FROM \"films\" as \"f\" " +
-                "LEFT JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
-                "LEFT JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
-                "GROUP BY \"ufl\".\"film_id\"" +
-                "ORDER BY \"counter\" desc " +
+                "JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
+                "JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
+                "GROUP BY \"f\".\"id\" , \"f\".\"name\" " +
+                "ORDER BY \"ctr\" desc " +
                 "LIMIT ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), count);

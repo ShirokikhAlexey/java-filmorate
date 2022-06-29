@@ -86,9 +86,8 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
     public List<Genre> getFilmGenres(Integer filmId) {
         String sql = "SELECT \"g\".\"id\" as \"id\", \"g\".\"name\" as \"name\", " +
                 "\"g\".\"description\" as \"description\" " +
-                "FROM \"films\" as \"f\" " +
-                "LEFT JOIN \"film_genre\" as \"fg\" on \"fg\".\"film_id\" = \"f\".\"id\" " +
-                "LEFT JOIN \"genres\" as \"g\" on \"fg\".\"genre_id\" = \"g\".\"id\" " +
+                "FROM \"film_genre\" as \"fg\" " +
+                "LEFT JOIN \"genres\" as \"g\" on \"g\".\"id\" = \"fg\".\"genre_id\" " +
                 "WHERE \"fg\".\"film_id\" = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs), filmId);
@@ -105,7 +104,7 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
     public void addFilmGenre(Integer filmId, Integer genreId) {
         String sql = "SELECT COUNT(*) FROM \"film_genre\" WHERE \"film_id\" = ? AND \"genre_id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, filmId, genreId);
-        if (count == null){
+        if (count == null || count == 0){
             String sqlInsert = "INSERT INTO \"film_genre\" (\"film_id\", \"genre_id\") VALUES(?, ?)";
             jdbcTemplate.update(sqlInsert, filmId, genreId);
         }

@@ -24,7 +24,7 @@ public class Film {
     public Film(@JsonProperty("name") String name, @JsonProperty("description") String description,
                 @JsonProperty("releaseDate") LocalDate releaseDate, @JsonProperty("duration") Integer duration,
                 @JsonProperty("rate") Integer rate, @JsonProperty("mpa") Rating mpa,
-                @JsonProperty("genres") ArrayList<Genre> genres) {
+                @JsonProperty("genres") List<Genre> genres) {
         this.id = null;
         this.name = name;
         this.description = description;

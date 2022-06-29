@@ -38,10 +38,10 @@ public class FilmController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@RequestBody Film film) throws ValidationException {
-        filmCRUD.create(film);
-        if (film.getGenres() != null) {
-            for (Genre genre : film.getGenres()) {
-                genreCRUD.addFilmGenre(film.getId(), genre.getId());
+        Film created = filmCRUD.create(film);
+        if (created.getGenres() != null) {
+            for (Genre genre : created.getGenres()) {
+                genreCRUD.addFilmGenre(created.getId(), genre.getId());
             }
         }
         log.info("Добавлен фильм {}", film.toString());
@@ -78,6 +78,8 @@ public class FilmController {
         try {
             Film film = filmCRUD.read(id);
             List<Genre> genres = genreCRUD.getFilmGenres(id);
+            System.out.println(film);
+            System.out.println(genres);
             if (genres.size() == 0){
                 genres = null;
             }
