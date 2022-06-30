@@ -78,8 +78,6 @@ public class FilmController {
         try {
             Film film = filmCRUD.read(id);
             List<Genre> genres = genreCRUD.getFilmGenres(id);
-            System.out.println(film);
-            System.out.println(genres);
             if (genres.size() == 0){
                 genres = null;
             }
