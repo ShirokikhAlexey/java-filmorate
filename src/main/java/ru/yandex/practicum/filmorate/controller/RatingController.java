@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.db.base.RatingStorage;
-import ru.yandex.practicum.filmorate.db.dao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.db.dao.RatingDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Rating;

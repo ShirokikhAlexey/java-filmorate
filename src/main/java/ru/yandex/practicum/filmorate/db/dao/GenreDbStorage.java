@@ -120,8 +120,8 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
         List<Genre> currentGenres = getFilmGenres(film.getId());
         List<Integer> newGenres = new ArrayList<>();
 
-        if (film.getGenres() != null){
-            for (Genre genre : film.getGenres()){
+        if (film.getGenres() != null) {
+            for (Genre genre : film.getGenres()) {
                 newGenres.add(genre.getId());
             }
         }
@@ -131,7 +131,7 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
                 deleteFilmGenre(film.getId(), genre.getId());
             }
         }
-        for (Integer genreId : newGenres){
+        for (Integer genreId : newGenres) {
             addFilmGenre(film.getId(), genreId);
         }
 

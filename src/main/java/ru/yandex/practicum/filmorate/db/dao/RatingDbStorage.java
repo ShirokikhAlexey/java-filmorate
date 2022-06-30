@@ -37,7 +37,7 @@ public class RatingDbStorage implements RatingStorage<Rating, Integer> {
         String sql = "INSERT INTO \"ratings\" (\"name\", \"description\") VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             return ps;
@@ -52,7 +52,7 @@ public class RatingDbStorage implements RatingStorage<Rating, Integer> {
         String sql = "UPDATE \"ratings\" SET \"name\"=?, \"description\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, updatedObject.getName());
             ps.setString(2, updatedObject.getDescription());
             ps.setInt(3, updatedObject.getId());

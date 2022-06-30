@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.db.dao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.db.dao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -79,7 +78,7 @@ public class FilmController {
         try {
             Film film = filmCRUD.read(id);
             List<Genre> genres = genreCRUD.getFilmGenres(id);
-            if (genres.size() == 0){
+            if (genres.size() == 0) {
                 genres = null;
             }
             film.setGenres(genres);

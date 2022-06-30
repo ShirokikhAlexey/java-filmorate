@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.sql.Date;
@@ -51,7 +49,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             ps.setDate(3, Date.valueOf(object.getReleaseDate()));
@@ -65,7 +63,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
     }
 
     public void addLike(Integer filmId, Integer userId) {
-        if (!hasLike(filmId, userId)){
+        if (!hasLike(filmId, userId)) {
             String sql = "INSERT INTO \"user_film_likes\" (\"film_id\", \"user_id\") VALUES (?, ?)";
             jdbcTemplate.update(sql, filmId, userId);
         }
@@ -85,7 +83,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "WHERE \"id\"=?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, updatedObject.getName());
             ps.setString(2, updatedObject.getDescription());
             ps.setDate(3, Date.valueOf(updatedObject.getReleaseDate()));

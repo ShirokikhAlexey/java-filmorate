@@ -25,6 +25,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @Autowired
     private UserDbStorage userCRUD;
 
