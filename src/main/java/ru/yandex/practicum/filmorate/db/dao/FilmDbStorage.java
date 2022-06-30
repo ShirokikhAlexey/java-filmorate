@@ -65,8 +65,10 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
     }
 
     public void addLike(Integer filmId, Integer userId) {
-        String sql = "INSERT INTO \"user_film_likes\" (\"film_id\", \"user_id\") VALUES (?, ?)";
-        jdbcTemplate.update(sql, filmId, userId);
+        if (!hasLike(filmId, userId)){
+            String sql = "INSERT INTO \"user_film_likes\" (\"film_id\", \"user_id\") VALUES (?, ?)";
+            jdbcTemplate.update(sql, filmId, userId);
+        }
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
@@ -149,12 +151,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "\"f\".\"releaseDate\" as \"filmReleaseDate\", \"f\".\"duration\" as \"filmDuration\", " +
                 "\"f\".\"rate\" as \"filmRate\" , \"r\".\"id\" as \"filmRatingID\", " +
                 "\"r\".\"name\" as \"filmRatingName\", \"r\".\"description\" as \"filmRatingDescription\", " +
-                "COUNT(\"f\".\"id\") as \"ctr\" " +
+                "COUNT(\"ufl\".\"film_id\") as \"ctr\" " +
                 "FROM \"films\" as \"f\" " +
                 "LEFT JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
                 "LEFT JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
                 "GROUP BY \"f\".\"id\" " +
-                "ORDER BY \"ctr\" desc " +
+                "ORDER BY \"ctr\" DESC " +
                 "LIMIT ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), count);
