@@ -147,7 +147,7 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "FROM \"films\" as \"f\" " +
                 "JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
                 "JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
-                "GROUP BY \"f\".\"id\" , \"f\".\"name\" " +
+                "GROUP BY \"f\".\"id\" " +
                 "ORDER BY \"ctr\" desc " +
                 "LIMIT ?";
 
