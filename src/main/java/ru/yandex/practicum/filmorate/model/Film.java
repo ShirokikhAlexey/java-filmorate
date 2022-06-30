@@ -7,6 +7,7 @@ import lombok.Data;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Data
@@ -32,7 +33,20 @@ public class Film {
         this.duration = Duration.ofMinutes(duration);
         this.rate = rate;
         this.mpa = mpa;
-        this.genres = genres;
+        this.genres = null;
+
+        if(genres != null) {
+            this.genres = new ArrayList<>();
+            for(Genre genre : genres){
+                if(!this.genres.contains(genre)) {
+                    this.genres.add(genre);
+                }
+            }
+        }
+
+        if(rate == null){
+            this.rate = 0;
+        }
     }
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Duration duration, Integer rate,

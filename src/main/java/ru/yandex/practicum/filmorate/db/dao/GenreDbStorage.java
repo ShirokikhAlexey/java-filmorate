@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.db.base.GenreStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -38,7 +39,7 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
         String sql = "INSERT INTO \"genres\" (\"name\", \"description\") VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, object.getName());
             ps.setString(2, object.getDescription());
             return ps;
@@ -53,7 +54,7 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
         String sql = "UPDATE \"genres\" SET \"name\"=?, \"description\"=?  WHERE \"id\"=?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(sql, new String[] {"id"});
+                    .prepareStatement(sql, new String[]{"id"});
             ps.setString(1, updatedObject.getName());
             ps.setString(2, updatedObject.getDescription());
             ps.setInt(3, updatedObject.getId());
@@ -104,9 +105,35 @@ public class GenreDbStorage implements GenreStorage<Genre, Integer> {
     public void addFilmGenre(Integer filmId, Integer genreId) {
         String sql = "SELECT COUNT(*) FROM \"film_genre\" WHERE \"film_id\" = ? AND \"genre_id\" = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, filmId, genreId);
-        if (count == null || count == 0){
+        if (count == null || count == 0) {
             String sqlInsert = "INSERT INTO \"film_genre\" (\"film_id\", \"genre_id\") VALUES(?, ?)";
             jdbcTemplate.update(sqlInsert, filmId, genreId);
         }
+    }
+
+    public void deleteFilmGenre(Integer filmId, Integer genreId) {
+        String sqlInsert = "DELETE FROM \"film_genre\" WHERE \"film_id\" = ? AND \"genre_id\" = ?";
+        jdbcTemplate.update(sqlInsert, filmId, genreId);
+    }
+
+    public void updateFilmGenres(Film film) {
+        List<Genre> currentGenres = getFilmGenres(film.getId());
+        List<Integer> newGenres = new ArrayList<>();
+
+        if (film.getGenres() != null){
+            for (Genre genre : film.getGenres()){
+                newGenres.add(genre.getId());
+            }
+        }
+
+        for (Genre genre : currentGenres) {
+            if (!newGenres.contains(genre.getId())) {
+                deleteFilmGenre(film.getId(), genre.getId());
+            }
+        }
+        for (Integer genreId : newGenres){
+            addFilmGenre(film.getId(), genreId);
+        }
+
     }
 }

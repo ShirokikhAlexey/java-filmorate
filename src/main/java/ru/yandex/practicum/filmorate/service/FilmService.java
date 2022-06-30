@@ -14,15 +14,19 @@ public class FilmService {
     @Autowired
     private FilmDbStorage dbSessionFilm;
 
-    public Film likeMovie(int userId, int filmId) throws ValidationException, NotFoundException {
+    public Film likeMovie(int filmId, int userId) throws ValidationException, NotFoundException {
         Film film = dbSessionFilm.read(filmId);
-        dbSessionFilm.addLike(userId, filmId);
+        dbSessionFilm.addLike(filmId, userId);
         return film;
     }
 
     public Film deleteLike(int filmId, int userId) throws ValidationException, NotFoundException {
         Film film = dbSessionFilm.read(filmId);
-        dbSessionFilm.deleteLike(userId, filmId);
+        if (dbSessionFilm.hasLike(filmId, userId)) {
+            dbSessionFilm.deleteLike(filmId, userId);
+        } else {
+            throw new NotFoundException();
+        }
         return film;
     }
 

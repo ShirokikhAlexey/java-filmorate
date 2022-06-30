@@ -64,12 +64,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         return object;
     }
 
-    public void addLike(Integer userId, Integer filmId) {
+    public void addLike(Integer filmId, Integer userId) {
         String sql = "INSERT INTO \"user_film_likes\" (\"film_id\", \"user_id\") VALUES (?, ?)";
         jdbcTemplate.update(sql, filmId, userId);
     }
 
-    public void deleteLike(Integer userId, Integer filmId) {
+    public void deleteLike(Integer filmId, Integer userId) {
         String sql = "DELETE FROM \"user_film_likes\" WHERE \"film_id\" = ? AND \"user_id\" = ?";
         jdbcTemplate.update(sql, filmId, userId);
     }
@@ -110,6 +110,12 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
         return count != null && count != 0;
     }
 
+    public boolean hasLike(Integer filmId, Integer userId) {
+        String sql = "SELECT COUNT(*) FROM \"user_film_likes\" WHERE \"film_id\" = ? AND \"user_id\" = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, filmId, userId);
+        return count != null && count != 0;
+    }
+
     @Override
     public List<Film> readAll() {
         String sql = "SELECT \"f\".\"id\" as \"filmID\", \"f\".\"name\" as \"filmName\", " +
@@ -145,8 +151,8 @@ public class FilmDbStorage implements FilmStorage<Film, Integer> {
                 "\"r\".\"name\" as \"filmRatingName\", \"r\".\"description\" as \"filmRatingDescription\", " +
                 "COUNT(\"f\".\"id\") as \"ctr\" " +
                 "FROM \"films\" as \"f\" " +
-                "JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
-                "JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
+                "LEFT JOIN \"user_film_likes\" as \"ufl\" ON \"f\".\"id\" = \"ufl\".\"film_id\" " +
+                "LEFT JOIN \"ratings\" as \"r\" ON \"r\".\"id\" = \"f\".\"mpa_id\" " +
                 "GROUP BY \"f\".\"id\" " +
                 "ORDER BY \"ctr\" desc " +
                 "LIMIT ?";

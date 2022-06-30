@@ -53,6 +53,7 @@ public class FilmController {
         try {
             if (film.getId() != 0 && filmCRUD.contains(film.getId())) {
                 filmCRUD.update(film);
+                genreCRUD.updateFilmGenres(film);
                 log.info("Изменен фильм {}", film.toString());
             } else if (film.getId() == 0) {
                 filmCRUD.create(film);

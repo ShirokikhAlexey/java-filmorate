@@ -78,7 +78,7 @@ INSERT INTO "genres" ("name", "description") VALUES ('Комедия', 'TEST');
 INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
 INSERT INTO "genres" ("name", "description") VALUES ('Драма', 'TEST');
 INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
-INSERT INTO "genres" ("name", "description") VALUES ('Комедия', 'TEST');
+INSERT INTO "genres" ("name", "description") VALUES ('Мультфильм', 'TEST');
 INSERT INTO "ratings" ("name", "description") VALUES ('PG-13', 'TEST');
 INSERT INTO "genres" ("name", "description") VALUES ('Комедия', 'TEST');
 INSERT INTO "ratings" ("name", "description") VALUES ('NC-17', 'TEST');
