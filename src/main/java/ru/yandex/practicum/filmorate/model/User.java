@@ -1,23 +1,33 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class User {
-    private int id;
+    private Integer id;
     private String email;
     private String login;
     private String name;
     private LocalDate birthday;
-    private Set<Integer> friendsList = new HashSet<>();
-    private Set<Integer> likedMovies = new HashSet<>();
 
-    public User(int id, String email, String login, String name, LocalDate birthday) {
+    @JsonCreator
+    public User(@JsonProperty("id") int id, @JsonProperty("email") String email, @JsonProperty("login") String login,
+                @JsonProperty("name") String name, @JsonProperty("birthday") LocalDate birthday) {
         this.id = id;
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
+
+    @JsonCreator
+    public User(@JsonProperty("email") String email, @JsonProperty("login") String login,
+                @JsonProperty("name") String name, @JsonProperty("birthday") LocalDate birthday) {
+        this.id = null;
         this.email = email;
         this.login = login;
         this.name = name;

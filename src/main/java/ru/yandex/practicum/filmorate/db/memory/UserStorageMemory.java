@@ -28,7 +28,7 @@ public class UserStorageMemory implements UserStorage<User, Integer> {
     }
 
     @Override
-    public void create(User object) throws ValidationException {
+    public User create(User object) throws ValidationException {
         this.validate(object);
         if (object.getId() == 0) {
             autoincrement += 1;
@@ -40,16 +40,18 @@ public class UserStorageMemory implements UserStorage<User, Integer> {
             }
             db.put(object.getId(), object);
         }
+        return object;
     }
 
     @Override
-    public void update(User updatedObject) throws NotFoundException, ValidationException {
+    public User update(User updatedObject) throws NotFoundException, ValidationException {
         this.validate(updatedObject);
         if (db.containsKey(updatedObject.getId())) {
             db.put(updatedObject.getId(), updatedObject);
         } else {
             throw new NotFoundException();
         }
+        return updatedObject;
     }
 
     @Override
